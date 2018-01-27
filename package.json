@@ -1,0 +1,9 @@
+{
+  "name": "export-from-json",
+  "version": "1.0.0",
+  "description": "export to txt, json, csv, xls format file from valid JavaScript JSON object.",
+  "main": "index.js",
+  "repository": "https://github.com/zheeeng/export-from-json",
+  "author": "Zheeeng",
+  "license": "MIT"
+}

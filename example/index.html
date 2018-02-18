@@ -1,0 +1,46 @@
+<pre id="data" style="padding: 8px; border: whitesmoke double 4px; background-color: lightgray; ">
+[
+    {
+        "Name": "万历十五年",
+        "Author": "黃仁宇",
+        "Subject": "History",
+        "Publication Date": 1981
+    },
+    {
+        "Name": "L'Ancien Régime et la Révolution",
+        "Author": "Alexis de Tocqueville",
+        "Subject": "History",
+        "Publication Date": 1866
+    },
+    {
+        "Name": "A Brief History of Time",
+        "Author": "Stephen Hawking",
+        "Subject": "Cosmology",
+        "Publication Date": 1988
+    },
+    {
+        "Name": "失楽園",
+        "Author": "渡辺淳一",
+        "Subject": "Novel",
+        "Publication Date": 1995
+    }
+]
+</pre>
+<label>file name: <input id="fileName" value="books" placeholder="file name"/></label>
+<button onclick="download('txt')">download plain text file</button>
+<button onclick="download('json')">download JSON file</button>
+<button onclick="download('csv')">download CSV file</button>
+<button onclick="download('xls')">download XLS file(Excel)</button>
+
+<script src="../dist/umd/index.js"></script>
+<script>
+    const $data = document.getElementById('data')
+    const $fileName = document.getElementById('fileName')
+
+    function download (exportType) {
+        const fileName = $fileName.value
+        const data = JSON.parse($data.innerText)
+
+        window.exportFromJSON({ data, fileName, exportType })
+    }
+</script>

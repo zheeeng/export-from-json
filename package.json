@@ -2,8 +2,25 @@
   "name": "export-from-json",
   "version": "1.0.0",
   "description": "export to txt, json, csv, xls format file from valid JavaScript JSON object.",
-  "main": "index.js",
+  "main": "dist/umd/index.js",
+  "module": "dist/esm/index.js",
+  "typings": "dist/types/index.d.ts",
   "repository": "https://github.com/zheeeng/export-from-json",
   "author": "Zheeeng",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "npm run build:esm && npm run build:umd",
+    "build:esm": "tsc -p ./config/tsconfig.esm.json",
+    "build:umd": "rollup -c ./config/rollup.config.js",
+    "test": "echo WIP",
+    "test:manual": "npm test && npm build && open index.html"
+  },
+  "devDependencies": {
+    "rollup": "^0.56.1",
+    "rollup-plugin-typescript2": "^0.11.1",
+    "rollup-plugin-uglify": "^3.0.0",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2"
+  }
 }

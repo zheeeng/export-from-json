@@ -1,7 +1,4 @@
 {
-	"extends": [
-		"tslint-config-prettier"
-	],
 	"rules": {
 		"adjacent-overload-signatures": true,
 		"ban-types": [

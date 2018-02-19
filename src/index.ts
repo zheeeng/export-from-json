@@ -1,4 +1,4 @@
-import { assertIsArray, getKeys, getValues, getEntries } from './utils'
+import { assertIsArray, getKeys, getValues, getEntries, normalizeFileName } from './utils'
 
 export type ValidType = string | number | null | boolean | object
 
@@ -86,13 +86,6 @@ function downloadFile (dataURI: string, fileName: string) {
   document.body.appendChild(anchor)
   anchor.click()
   document.body.removeChild(anchor)
-}
-
-function normalizeFileName (fileName: string, extension: ExportType) {
-  const suffix = '.' + extension
-  const extensionPattern = new RegExp(`(\\${extension})?$`)
-
-  return fileName.replace(/\s+/, '_').replace(extensionPattern, suffix)
 }
 
 export default function exportFromJSON ({

@@ -18,9 +18,9 @@ export interface ITableMap {
   [key: string]: string[],
 }
 
-function createTableMap (data: RawData): ITableMap {
+export function createTableMap (data: RawData): ITableMap {
   return data.map(getEntries).reduce(
-    (tableMap, rowKVs, rowIndex) =>
+    (tMap, rowKVs, rowIndex) =>
       rowKVs.reduce(
         (map, [key, value]) => {
           const columnValues = map[key] || Array(rowIndex).map(_ => '')
@@ -30,13 +30,13 @@ function createTableMap (data: RawData): ITableMap {
 
           return map
         },
-        tableMap,
+        tMap,
       ),
-    Object.create(null) as ITableMap,
-  )
+    Object.create(null) as Partial<ITableMap>,
+  ) as ITableMap
 }
 
-function createCSVData (data: RawData) {
+export function createCSVData (data: RawData) {
   const tableMap = createTableMap(data)
   const head = getKeys(tableMap).join(',') + '\r\n'
   const columns = getValues(tableMap).map(column => column.map(value => `"${value.replace(/\"/g, '""')}"`))
@@ -47,7 +47,7 @@ function createCSVData (data: RawData) {
   return head + rows.join('\r\n')
 }
 
-function renderTableHTMLText (data: RawData) {
+export function renderTableHTMLText (data: RawData) {
   const tableMap = createTableMap(data)
   const head = getKeys(tableMap)
   const columns = getValues(tableMap).map(column => column.map(value => `<td>${value}</td>`))
@@ -63,7 +63,7 @@ function renderTableHTMLText (data: RawData) {
   `
 }
 
-function createXLSData (data: RawData) {
+export function createXLSData (data: RawData) {
   return `
     <html>
       <head>
@@ -76,7 +76,7 @@ function createXLSData (data: RawData) {
   `
 }
 
-function downloadFile (dataURI: string, fileName: string) {
+export function downloadFile (dataURI: string, fileName: string) {
   const anchor = document.createElement('a')
   anchor.href = dataURI
 

@@ -21,7 +21,8 @@ const createUMDTemplate = (isUglify = false) => ({
     typescript({
       tsconfig: umdTSConfig,
     }),
-  ].concat(isUglify ? [uglify()] : []),
+    isUglify && uglify(),
+  ],
 })
 
 const config = [

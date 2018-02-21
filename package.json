@@ -13,10 +13,13 @@
     "build": "npm run build:esm && npm run build:umd",
     "build:esm": "tsc -p ./config/tsconfig.esm.json",
     "build:umd": "rollup -c ./config/rollup.config.js",
-    "test": "jest",
+    "test": "npm run test:lint && npm run test:spec",
+    "test:spec": "jest",
     "test:update": "jest --updateSnapshot",
     "test:lint": "tslint -p ./tsconfig.json",
-    "test:manual": "npm test && npm build && open index.html"
+    "test:manual": "npm test && npm build && open index.html",
+    "precommit": "npm test",
+    "prepush": "npm test"
   },
   "files": [
     "src",
@@ -25,6 +28,7 @@
   ],
   "devDependencies": {
     "@types/jest": "^22.1.3",
+    "husky": "^0.14.3",
     "jest": "^22.3.0",
     "rollup": "^0.56.1",
     "rollup-plugin-typescript2": "^0.11.1",

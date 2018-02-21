@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createTableMap works correctly 1`] = `
+Object {
+  "a": Array [
+    "",
+    "",
+    "100",
+  ],
+  "b": Array [
+    "",
+    "",
+    "[1,2,3]",
+  ],
+  "bar": Array [
+    "",
+    "bar",
+    "",
+  ],
+  "c": Array [
+    "",
+    "",
+    "{\\"x\\":200,\\"y\\":300}",
+  ],
+  "d": Array [
+    "",
+    "",
+    "D",
+  ],
+  "e": Array [
+    "",
+    "",
+    "null",
+  ],
+  "f": Array [
+    "",
+    "",
+    "",
+  ],
+  "foo": Array [
+    "",
+    "foo",
+    "",
+  ],
+  "greeting": Array [
+    "hello",
+    "",
+    "",
+  ],
+}
+`;

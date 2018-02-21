@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createCSVData works correctly 1`] = `
+"
+    <html>
+      <head>
+        <meta charset=\\"UTF-8\\">
+      </head >
+      <body>
+        
+    <table>
+      <thead><tr><th><b>greeting</b></th><th><b>foo</b></th><th><b>bar</b></th><th><b>a</b></th><th><b>b</b></th><th><b>c</b></th><th><b>d</b></th><th><b>e</b></th><th><b>f</b></th></tr></thead>
+      <tbody><tr><td>hello</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td>foo</td><td>bar</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>100</td><td>[1,2,3]</td><td>{\\"x\\":200,\\"y\\":300}</td><td>D</td><td>null</td><td></td></tr></tbody>
+    </table>
+  
+      </body>
+    </html >
+  "
+`;

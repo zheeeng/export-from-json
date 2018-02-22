@@ -96,7 +96,7 @@ export default function exportFromJSON ({
   const MESSAGE_IS_ARRAY_FAIL =
     'Invalid export data. Please provide an array of JSON object'
   const MESSAGE_VALID_JSON_FAIL =
-    'Invalid export data. Please provide an array of JSON object'
+    'Invalid export data. Please provide JSON object'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`
 
   let jsonStringifiedContent: string

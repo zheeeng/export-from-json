@@ -17,7 +17,7 @@
     "test:spec": "jest",
     "test:update": "jest --updateSnapshot",
     "test:lint": "tslint -p ./tsconfig.json",
-    "test:manual": "npm test && npm build && open index.html",
+    "test:manual": "npm test && npm run build && open example/index.html",
     "precommit": "npm test",
     "prepush": "npm test",
     "prepublish": "npm run build",

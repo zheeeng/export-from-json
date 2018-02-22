@@ -19,7 +19,9 @@
     "test:lint": "tslint -p ./tsconfig.json",
     "test:manual": "npm test && npm build && open index.html",
     "precommit": "npm test",
-    "prepush": "npm test"
+    "prepush": "npm test",
+    "prepublish": "npm run build",
+    "release": "npm version patch & npm publish"
   },
   "files": [
     "src",

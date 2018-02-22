@@ -21,7 +21,7 @@
     "precommit": "npm test",
     "prepush": "npm test",
     "prepublish": "npm run build",
-    "release": "npm version patch & npm publish"
+    "release": "npm version patch && npm publish"
   },
   "files": [
     "src",

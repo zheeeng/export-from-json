@@ -9,14 +9,14 @@ Export and download plain text, json, csv, xls file from valid JavaScript JSON o
 
 ## Installation
 
-```
+```sh
 yarn add export-from-json
 ```
 
 or
 
 
-```
+```sh
 npm i --save export-from-json
 ```
 
@@ -24,7 +24,7 @@ npm i --save export-from-json
 
 In Module system:
 
-```
+```javascript
 import exportFromJSON from 'export-from-json'
 
 const data = [{ foo: 'foo'}, { bar: 'bar' }]
@@ -36,7 +36,7 @@ exportFromJSON({ data, fileName, exportType })
 
 In browser: [example code](example/index.html)
 
-```
+```javascript
 <script src="path/to/yourCopyOf/exportFromJSON.min.js"></script>
 <script>
     const data = [{ foo: 'foo'}, { bar: 'bar' }]

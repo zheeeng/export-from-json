@@ -34,7 +34,7 @@ const exportType = 'csv'
 exportFromJSON({ data, fileName, exportType })
 ```
 
-In browser: [example code](example/index.html)
+In browser: [codepen example](https://codepen.io/zheeeng/pen/PQxBKr)
 
 ```javascript
 <script src="path/to/yourCopyOf/exportFromJSON.min.js"></script>

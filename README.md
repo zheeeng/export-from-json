@@ -55,3 +55,9 @@ In browser: [codepen example](https://codepen.io/zheeeng/pen/PQxBKr)
 | data        | true     | `Array<JSON>` or `JSON` | 'txt' and 'json' export types support any valid JSON data. 'csv' and 'xls' export types support only JSON array.
 | fileName    | false    | string | filename without extension
 | exportType  | false    | Enum | 'txt', 'json', 'csv', 'xls'`
+
+You can also reference these export types through a mounted field `ExportType`:
+
+```js
+exportFromJSON({ data: jsonData, fileName: 'data', exportType: exportFromJSON.ExportType.csv })
+```

@@ -1,9 +1,12 @@
 {
   "name": "export-from-json",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Export to txt, json, csv, xls format file from valid JavaScript JSON object.",
   "keywords": [
-    "json", "csv", "xls", "excel"
+    "json",
+    "csv",
+    "xls",
+    "excel"
   ],
   "main": "dist/umd/index.js",
   "module": "dist/esm/index.js",

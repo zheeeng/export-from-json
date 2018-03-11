@@ -6,7 +6,12 @@ export type RawData = Array<{
   [key: string]: ValidType,
 }>
 
-export type ExportType = 'txt' | 'json' | 'csv' | 'xls'
+export enum ExportType {
+  txt = 'txt',
+  json = 'json',
+  csv = 'csv',
+  xls = 'xls',
+}
 
 export interface IOption {
   data: RawData
@@ -88,7 +93,7 @@ export function downloadFile (dataURI: string, fileName: string) {
   document.body.removeChild(anchor)
 }
 
-export default function exportFromJSON ({
+function exportFromJSON ({
   data,
   fileName = '',
   exportType = 'json',
@@ -110,25 +115,25 @@ export default function exportFromJSON ({
   }
 
   switch (exportType) {
-    case 'txt':
+    case ExportType.txt:
       content = jsonStringifiedContent
       dataURI = 'data:text/plain;charset=utf-8,' + encodeURIComponent(content)
       downloadFile(dataURI, normalizeFileName(fileName, 'txt'))
       break
-    case 'json':
+    case ExportType.json:
       content = jsonStringifiedContent
       dataURI =
         'data:application/json;charset=utf-8,' + encodeURIComponent(content)
       downloadFile(dataURI, normalizeFileName(fileName, 'json'))
       break
-    case 'csv':
+    case ExportType.csv:
       assertIsArray(data, MESSAGE_IS_ARRAY_FAIL)
       content = createCSVData(data)
       dataURI =
         'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(content)
       downloadFile(dataURI, normalizeFileName(fileName, 'csv'))
       break
-    case 'xls':
+    case ExportType.xls:
       assertIsArray(data, MESSAGE_IS_ARRAY_FAIL)
       content = createXLSData(data)
       dataURI =
@@ -140,3 +145,5 @@ export default function exportFromJSON ({
       throw new Error(MESSAGE_UNKNOWN_EXPORT_TYPE)
   }
 }
+
+export default Object.assign(exportFromJSON, { ExportType })

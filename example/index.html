@@ -34,6 +34,7 @@
 
 <script src="../dist/umd/index.js"></script>
 <script>
+    const exportFromJSON = window.exportFromJSON
     const $data = document.getElementById('data')
     const $fileName = document.getElementById('fileName')
 
@@ -49,6 +50,6 @@
         const fileName = $fileName.value
         const data = JSON.parse($data.innerText)
 
-        window.exportFromJSON({ data, fileName, exportType })
+        exportFromJSON({ data, fileName, exportType })
     }
 </script>

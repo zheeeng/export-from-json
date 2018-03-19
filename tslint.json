@@ -191,10 +191,6 @@
 		"class-name": true,
 		"encoding": true,
 		"import-spacing": true,
-		"interface-name": [
-			true,
-			"always-prefix"
-		],
 		"interface-over-type-literal": true,
 		"jsdoc-format": true,
 		"match-default-export-name": true,

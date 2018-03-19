@@ -23,6 +23,11 @@ export interface ITableMap {
   [key: string]: string[],
 }
 
+export interface ExportFromJSON {
+  (option: IOption): void,
+  ExportType: typeof ExportType
+}
+
 export function createTableMap (data: RawData): ITableMap {
   return data.map(getEntries).reduce(
     (tMap, rowKVs, rowIndex) =>
@@ -93,7 +98,12 @@ export function downloadFile (dataURI: string, fileName: string) {
   document.body.removeChild(anchor)
 }
 
-function exportFromJSON ({
+interface F { (): any; someValue: number }
+
+const f = (() => 123) as F
+f.someValue = 3
+
+function efj ({
   data,
   fileName = '',
   exportType = 'json',
@@ -146,4 +156,8 @@ function exportFromJSON ({
   }
 }
 
-export default Object.assign(exportFromJSON, { ExportType })
+const exportFromJSON = efj as ExportFromJSON
+
+exportFromJSON.ExportType = ExportType
+
+export default exportFromJSON

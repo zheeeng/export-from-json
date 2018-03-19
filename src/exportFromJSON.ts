@@ -32,7 +32,9 @@ export function createTableMap (data: RawData): ITableMap {
   return data.map(getEntries).reduce(
     (tMap, rowKVs, rowIndex) =>
       rowKVs.reduce(
-        (map, [key, value]) => {
+        (map, kv) => {
+          const key = kv[0]
+          const value = kv[1]
           const columnValues = map[key] || Array.from({ length: data.length }).map(_ => '')
           columnValues[rowIndex] =
             (typeof value !== 'string' ? JSON.stringify(value) : value) || ''

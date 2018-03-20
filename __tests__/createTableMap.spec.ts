@@ -1,5 +1,5 @@
 import { testTableItems, testTableMap as expectedTableMap } from './shared/data'
-import { createTableMap } from '../src/exportFromJSON'
+import { createTableMap } from '../src/converters'
 
 describe('createTableMap', () => {
   const tableMap = createTableMap(testTableItems)

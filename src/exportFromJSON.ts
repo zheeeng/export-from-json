@@ -1,109 +1,18 @@
-import { assertIsArray, getKeys, getValues, getEntries, normalizeFileName } from './utils'
-
-export type ValidType = string | number | null | boolean | object | undefined
-
-export type RawData = Array<{
-  [key: string]: ValidType,
-}>
-
-export enum ExportType {
-  txt = 'txt',
-  json = 'json',
-  csv = 'csv',
-  xls = 'xls',
-}
-
+import { RawData } from './interface'
+import { assertIsArray, normalizeFileName } from './utils'
+import { downloadFile } from './helpers'
+import { createJSONData, createCSVData, createXLSData } from './converters'
+import ExportType from './ExportType'
 export interface IOption {
   data: RawData
   fileName?: string
   exportType?: ExportType
 }
 
-export interface ITableMap {
-  [key: string]: string[],
-}
-
 export interface ExportFromJSON {
   (option: IOption): void,
   ExportType: typeof ExportType
 }
-
-export function createTableMap (data: RawData): ITableMap {
-  return data.map(getEntries).reduce(
-    (tMap, rowKVs, rowIndex) =>
-      rowKVs.reduce(
-        (map, kv) => {
-          const key = kv[0]
-          const value = kv[1]
-          const columnValues = map[key] || Array.from({ length: data.length }).map(_ => '')
-          columnValues[rowIndex] =
-            (typeof value !== 'string' ? JSON.stringify(value) : value) || ''
-          map[key] = columnValues
-
-          return map
-        },
-        tMap,
-      ),
-    Object.create(null) as Partial<ITableMap>,
-  ) as ITableMap
-}
-
-export function createCSVData (data: RawData) {
-  const tableMap = createTableMap(data)
-  const head = getKeys(tableMap).join(',') + '\r\n'
-  const columns = getValues(tableMap).map(column => column.map(value => `"${value.replace(/\"/g, '""')}"`))
-  const rows = columns.reduce(
-    (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value},${column[rowIndex]}`),
-  )
-
-  return head + rows.join('\r\n')
-}
-
-function renderTableHTMLText (data: RawData) {
-  const tableMap = createTableMap(data)
-  const head = getKeys(tableMap)
-  const columns = getValues(tableMap).map(column => column.map(value => `<td>${value}</td>`))
-  const rows = columns.reduce(
-    (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value}${column[rowIndex]}`),
-  )
-
-  return `
-    <table>
-      <thead><tr><th><b>${head.join('</b></th><th><b>')}</b></th></tr></thead>
-      <tbody><tr>${rows.join('</tr><tr>')}</tr></tbody>
-    </table>
-  `
-}
-
-export function createXLSData (data: RawData) {
-  return `
-    <html>
-      <head>
-        <meta charset="UTF-8">
-      </head >
-      <body>
-        ${renderTableHTMLText(data)}
-      </body>
-    </html >
-  `
-}
-
-export function downloadFile (dataURI: string, fileName: string) {
-  const anchor = document.createElement('a')
-  anchor.href = dataURI
-
-  anchor.download = fileName
-  anchor.setAttribute('style', 'visibility:hidden')
-
-  document.body.appendChild(anchor)
-  anchor.click()
-  document.body.removeChild(anchor)
-}
-
-interface F { (): any; someValue: number }
-
-const f = (() => 123) as F
-f.someValue = 3
 
 function efj ({
   data,
@@ -116,24 +25,24 @@ function efj ({
     'Invalid export data. Please provide JSON object'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`
 
-  let jsonStringifiedContent: string
+  let JSONData: string
   let dataURI: string
   let content: string
 
   try {
-    jsonStringifiedContent = JSON.stringify(data, null, 4)
+    JSONData = createJSONData(data)
   } catch {
     throw new Error(MESSAGE_VALID_JSON_FAIL)
   }
 
   switch (exportType) {
     case ExportType.txt:
-      content = jsonStringifiedContent
+      content = JSONData
       dataURI = 'data:text/plain;charset=utf-8,' + encodeURIComponent(content)
       downloadFile(dataURI, normalizeFileName(fileName, 'txt'))
       break
     case ExportType.json:
-      content = jsonStringifiedContent
+      content = JSONData
       dataURI =
         'data:application/json;charset=utf-8,' + encodeURIComponent(content)
       downloadFile(dataURI, normalizeFileName(fileName, 'json'))

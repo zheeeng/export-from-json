@@ -1,6 +1,6 @@
 {
   "name": "export-from-json",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Export to txt, json, csv, xls format file from valid JavaScript JSON object.",
   "keywords": [
     "json",

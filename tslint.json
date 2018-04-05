@@ -158,10 +158,6 @@
 		],
 		"no-duplicate-imports": true,
 		"no-mergeable-namespace": true,
-		"object-literal-sort-keys": [
-			true,
-			"match-declaration-order"
-		],
 		"prefer-const": true,
 		"trailing-comma": [
 			true,

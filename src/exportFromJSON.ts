@@ -11,7 +11,7 @@ export interface IOption {
 
 export interface ExportFromJSON {
   (option: IOption): void,
-  ExportType: typeof ExportType
+  types: { [type in ExportType]: type }
 }
 
 function efj ({
@@ -36,25 +36,25 @@ function efj ({
   }
 
   switch (exportType) {
-    case ExportType.txt:
+    case 'txt':
       content = JSONData
       dataURI = 'data:text/plain;charset=utf-8,' + encodeURIComponent(content)
       downloadFile(dataURI, normalizeFileName(fileName, 'txt'))
       break
-    case ExportType.json:
+    case 'json':
       content = JSONData
       dataURI =
         'data:application/json;charset=utf-8,' + encodeURIComponent(content)
       downloadFile(dataURI, normalizeFileName(fileName, 'json'))
       break
-    case ExportType.csv:
+    case 'csv':
       assertIsArray(data, MESSAGE_IS_ARRAY_FAIL)
       content = createCSVData(data)
       dataURI =
         'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(content)
       downloadFile(dataURI, normalizeFileName(fileName, 'csv'))
       break
-    case ExportType.xls:
+    case 'xls':
       assertIsArray(data, MESSAGE_IS_ARRAY_FAIL)
       content = createXLSData(data)
       dataURI =
@@ -69,6 +69,11 @@ function efj ({
 
 const exportFromJSON = efj as ExportFromJSON
 
-exportFromJSON.ExportType = ExportType
+exportFromJSON.types = {
+  txt : 'txt',
+  json : 'json',
+  csv : 'csv',
+  xls : 'xls',
+}
 
 export default exportFromJSON

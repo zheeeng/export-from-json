@@ -56,8 +56,8 @@ In browser: [codepen example](https://codepen.io/zheeeng/pen/PQxBKr)
 | fileName    | false    | string | filename without extension
 | exportType  | false    | Enum | 'txt', 'json', 'csv', 'xls'`
 
-You can also reference these export types through a mounted field `ExportType`:
+You can also reference these export types through a mounted field `types`:
 
 ```js
-exportFromJSON({ data: jsonData, fileName: 'data', exportType: exportFromJSON.ExportType.csv })
+exportFromJSON({ data: jsonData, fileName: 'data', exportType: exportFromJSON.types.csv })
 ```

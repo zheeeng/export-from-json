@@ -1,8 +1,3 @@
-enum ExportType {
-  txt = 'txt',
-  json = 'json',
-  csv = 'csv',
-  xls = 'xls',
-}
+type ExportType = 'txt' | 'json' | 'csv' | 'xls'
 
 export default ExportType

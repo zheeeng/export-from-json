@@ -50,7 +50,6 @@
 			"ignore-properties"
 		],
 		"no-internal-module": true,
-		"no-namespace": true,
 		"no-reference": true,
 		"no-unnecessary-type-assertion": true,
 		"only-arrow-functions": [

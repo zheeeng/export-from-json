@@ -9,12 +9,7 @@ export interface IOption {
   exportType?: ExportType
 }
 
-export interface ExportFromJSON {
-  (option: IOption): void,
-  types: { [type in ExportType]: type }
-}
-
-function efj ({
+function exportFromJSON ({
   data,
   fileName = '',
   exportType = 'json',
@@ -67,13 +62,13 @@ function efj ({
   }
 }
 
-const exportFromJSON = efj as ExportFromJSON
-
-exportFromJSON.types = {
-  txt : 'txt',
-  json : 'json',
-  csv : 'csv',
-  xls : 'xls',
+namespace exportFromJSON {
+  export const types = {
+    txt : 'txt',
+    json : 'json',
+    csv : 'csv',
+    xls : 'xls',
+  }
 }
 
 export default exportFromJSON

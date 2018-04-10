@@ -1,4 +1,4 @@
-export function assertIsArray (data: any[], message: string) {
+export function assertIsArray (data: any, message: string) {
   if (Object.prototype.toString.call(data) !== '[object Array]') {
     throw new Error(message)
   }

@@ -1,15 +1,19 @@
-import { RawData } from './interface'
 import { getKeys, getValues, getEntries } from './utils'
 
-export function createJSONData (data: RawData) {
-  return JSON.stringify(data, null, 4)
+export function createJSONData (data: object) {
+  const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide JSON object'
+  try {
+    return JSON.stringify(data, null, 4)
+  } catch {
+    throw new Error(MESSAGE_VALID_JSON_FAIL)
+  }
 }
 
 export interface ITableMap {
   [key: string]: string[],
 }
 
-export function createTableMap (data: RawData): ITableMap {
+export function createTableMap (data: any[]): ITableMap {
   return data.map(getEntries).reduce(
     (tMap, rowKVs, rowIndex) =>
       rowKVs.reduce(
@@ -29,7 +33,7 @@ export function createTableMap (data: RawData): ITableMap {
   ) as ITableMap
 }
 
-export function createCSVData (data: RawData) {
+export function createCSVData (data: any[]) {
   const tableMap = createTableMap(data)
   const head = getKeys(tableMap).join(',') + '\r\n'
   const columns = getValues(tableMap).map(column => column.map(value => `"${value.replace(/\"/g, '""')}"`))
@@ -40,7 +44,7 @@ export function createCSVData (data: RawData) {
   return head + rows.join('\r\n')
 }
 
-export function renderTableHTMLText (data: RawData) {
+export function renderTableHTMLText (data: any[]) {
   const tableMap = createTableMap(data)
   const head = getKeys(tableMap)
   const columns = getValues(tableMap).map(column => column.map(value => `<td>${value}</td>`))
@@ -56,7 +60,7 @@ export function renderTableHTMLText (data: RawData) {
   `
 }
 
-export function createXLSData (data: RawData) {
+export function createXLSData (data: any[]) {
   return `
     <html>
       <head>

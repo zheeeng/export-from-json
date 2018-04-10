@@ -1,6 +1,6 @@
 import { testTableItems } from './shared/data'
 import { createXLSData } from '../src/converters'
 
-it('createCSVData works correctly', () => {
+it('createXLSData works correctly', () => {
   expect(createXLSData(testTableItems)).toMatchSnapshot()
 })

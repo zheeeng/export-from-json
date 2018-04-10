@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createCSVData works correctly 1`] = `
+exports[`createXLSData works correctly 1`] = `
 "
     <html>
       <head>

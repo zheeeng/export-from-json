@@ -4,7 +4,6 @@
     "target": "es5",
     "lib": ["es2015", "dom"],
     "moduleResolution": "node",
-    "outDir": "dist/esm",
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
@@ -15,6 +14,9 @@
     "noUnusedLocals": true,
     "noFallthroughCasesInSwitch": true,
   },
+  "exclude": [
+    "node_modules"
+  ],
   "include": [
     "src/*"
   ]

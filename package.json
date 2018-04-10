@@ -16,7 +16,8 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rm -rf dist",
-    "build": "npm run build:esm && npm run build:umd",
+    "build": "npm run build:esm && npm run build:es2015 && npm run build:umd",
+    "build:es2015": "tsc -p ./config/tsconfig.es2015.json",
     "build:esm": "tsc -p ./config/tsconfig.esm.json",
     "build:umd": "rollup -c ./config/rollup.config.js",
     "test": "npm run test:lint && npm run test:spec",

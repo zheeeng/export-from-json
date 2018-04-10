@@ -1,6 +1,6 @@
 import { RawData } from './interface'
 import { assertIsArray, normalizeFileName } from './utils'
-import { downloadFile } from './helpers'
+import { downloadFile } from './processors'
 import { createJSONData, createCSVData, createXLSData } from './converters'
 import ExportType from './ExportType'
 export interface IOption {

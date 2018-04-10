@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createTableMap works correctly 1`] = `
+exports[`_createTableMap works correctly 1`] = `
 Object {
   "a": Array [
     "",

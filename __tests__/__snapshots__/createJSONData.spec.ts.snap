@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createJSONData convert plain object as the JSON.stringify does 1`] = `
+exports[`_createJSONData convert plain object as the JSON.stringify does 1`] = `
 "[
     {
         \\"greeting\\": \\"hello\\"

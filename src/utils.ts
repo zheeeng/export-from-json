@@ -1,3 +1,5 @@
+import { Entry } from './interface'
+
 export function assertIsArray (data: any, message: string) {
   if (Object.prototype.toString.call(data) !== '[object Array]') {
     throw new Error(message)
@@ -13,7 +15,7 @@ export function getKeys<T> (data: { [key: string]: T }) {
 }
 
 export function getEntries<T> (data: { [key: string]: T }) {
-  return Object.keys(data).map(key => [key, data[key]] as [string, T])
+  return Object.keys(data).map(key => [key, data[key]] as Entry<T>)
 }
 
 export function normalizeFileName (fileName: string, extension: string) {

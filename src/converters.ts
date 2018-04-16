@@ -1,9 +1,13 @@
 import { getKeys, getValues, getEntries } from './utils'
 
-export function _createJSONData (data: object) {
+export function _createJSONData (
+  data: object,
+  replacer: ((key: string, value: any) => any) | Array<number | string> | null = null,
+  space: string | number,
+) {
   const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide JSON object'
   try {
-    return JSON.stringify(data, null, 4)
+    return JSON.stringify(data, replacer as any, space)
   } catch {
     throw new Error(MESSAGE_VALID_JSON_FAIL)
   }

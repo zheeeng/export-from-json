@@ -7,8 +7,7 @@ export interface IOption {
   data: object
   fileName?: string
   exportType?: ExportType
-  replacer?: string[] | ((key: string, value: any, path: string, depth: number) => void)
-  depth?: number
+  replacer?: ((key: string, value: any) => any) | Array<number | string> | null,
   space?: string | number
   processor?: (data: string, fileName: string) => void
 }
@@ -17,8 +16,7 @@ function exportFromJSON ({
   data,
   fileName = '',
   exportType = 'json',
-  replacer,
-  depth = -1,
+  replacer = null,
   space = 4,
   processor = downloadFile,
 }: IOption) {
@@ -26,7 +24,7 @@ function exportFromJSON ({
     'Invalid export data. Please provide an array of JSON object'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`
 
-  const JSONData = _createJSONData(data)
+  const JSONData = _createJSONData(data, replacer, space)
 
   switch (exportType) {
     case 'txt': {

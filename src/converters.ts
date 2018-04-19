@@ -1,5 +1,6 @@
 import { getKeys, getValues, getEntries } from './utils'
 
+// TODO:: execute toSchema implicit converting
 export function _createJSONData (
   data: object,
   replacer: ((key: string, value: any) => any) | Array<number | string> | null = null,

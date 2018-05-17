@@ -7,7 +7,7 @@
 [![npm version](https://img.shields.io/npm/v/export-from-json.svg)](https://www.npmjs.com/package/export-from-json)
 [![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/export-from-json.svg)](https://unpkg.com/export-from-json/dist/umd/index.min.js)
 
-Export and download plain text, json, csv, xls file from valid JavaScript JSON object.
+Export and download plain text, json, csv, xls file from valid JSON.
 
 ## Installation
 

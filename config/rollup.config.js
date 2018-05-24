@@ -1,6 +1,6 @@
 import typescript from 'rollup-plugin-typescript2'
 
-const uglify = require('rollup-plugin-uglify')
+const uglify = require('rollup-plugin-uglify').uglify
 const pkg = require('../package.json')
 
 // relative to project root

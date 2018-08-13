@@ -1,5 +1,7 @@
 # Export From JSON
 
+<div align="center">
+
 [![Greenkeeper badge](https://badges.greenkeeper.io/zheeeng/export-from-json.svg)](https://greenkeeper.io/)
 [![language](https://img.shields.io/badge/%3C%2F%3E-TypeScript-blue.svg)](http://typescriptlang.org/)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
@@ -8,6 +10,10 @@
 [![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/export-from-json.svg)](https://unpkg.com/export-from-json/dist/umd/index.min.js)
 
 Export and download plain text, json, csv, xls file from valid JSON.
+
+[![NPM](https://nodei.co/npm/export-from-json.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/export-from-json/)
+
+</div>
 
 ## Installation
 

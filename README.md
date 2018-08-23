@@ -114,6 +114,7 @@ http.createServer(function (request, response){
 | fileName    | false    | string | filename without extension, default to 'download'
 | exportType  | false    | Enum ExportType | 'txt'(default), 'json', 'csv', 'xls'`
 | processor   | false    | (content: string, type: ExportType, fileName: string) => any | default to a front-end downloader
+| withBOM     | false    | boolean | Add BOM(byte order mark) meta to CSV file. BOM is expected by `Excel` when reading UTF8 CSV file. It is default to false.
 
 You can also reference these export types through a mounted field `types`:
 

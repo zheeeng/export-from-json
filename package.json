@@ -37,15 +37,15 @@
     "example"
   ],
   "devDependencies": {
-    "@types/jest": "^23.0.0",
+    "@types/jest": "^23.3.1",
     "husky": "^0.14.3",
-    "jest": "^22.4.3",
+    "jest": "^23.5.0",
     "rollup": "^0.64.0",
-    "rollup-plugin-typescript2": "^0.16.0",
+    "rollup-plugin-typescript2": "^0.16.1",
     "rollup-plugin-uglify": "^4.0.0",
-    "ts-jest": "^23.0.0",
-    "tslint": "^5.9.1",
-    "typescript": "^2.8.1"
+    "ts-jest": "^23.1.4",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.1"
   },
   "jest": {
     "transform": {

@@ -70,31 +70,31 @@ const http = require('http')
 const exportFromJSON = require('export-from-json')
 
 http.createServer(function (request, response){
-    // exportFromJSON actually support passing JSON as the data option. It's very common that reading it from http request.
+    // exportFromJSON actually support passing JSON as the data option. It's very common that reading it from http request directly.
     const data = '[{"foo":"foo"},{"bar":"bar"}]'
     const fileName = 'download'
-    const exportType = 'csv'
+    const exportType = 'txt'
 
     const result = exportFromJSON({
         data,
         fileName,
         exportType,
-        process (content, type, fileName) {
+        processor (content, type, fileName) {
             switch (type) {
                 case 'txt':
-                    response.writeHead(200, {'Content-Type': 'text/plain'})
+                    response.setHeader('Content-Type', 'text/plain')
                     break
                 case 'json':
-                    response.writeHead(200, {'Content-Type': 'text/plain'})
+                    response.setHeader('Content-Type', 'text/plain')
                     break
                 case 'csv':
-                    response.writeHead(200, {'Content-Type': 'text/csv'})
+                    response.setHeader('Content-Type', 'text/csv')
                     break
                 case 'xls':
-                    response.writeHead(200, {'Content-Type': 'application/vnd.ms-excel'})
+                    response.setHeader('Content-Type', 'application/vnd.ms-excel')
                     break
             }
-            response.writeHead('Content-disposition', 'attachment;filename=' + fileName)
+            response.setHeader('Content-disposition', 'attachment;filename=' + fileName)
             return content
         }
     })

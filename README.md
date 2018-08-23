@@ -109,9 +109,9 @@ http.createServer(function (request, response){
 | Option name | Required | Type | Description
 | ----------- | -------- | ---- | ----
 | data        | true     | `Array<JSON>` or `JSON` | 'txt' and 'json' export types support any valid JSON data. 'csv' and 'xls' export types support only JSON array.
-| fileName    | false    | string | filename without extension
-| exportType  | false    | Enum | 'txt', 'json', 'csv', 'xls'`
-| processor   | false    | (data: string, type: ExportType, fileName: string) => any
+| fileName    | false    | string | filename without extension, default to 'download'
+| exportType  | false    | Enum | 'txt'(default), 'json', 'csv', 'xls'`
+| processor   | false    | (data: string, type: ExportType, fileName: string) => any | default to a front-end downloader
 
 You can also reference these export types through a mounted field `types`:
 

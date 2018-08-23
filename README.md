@@ -30,7 +30,11 @@ npm i --save export-from-json
 
 ## Usage
 
-In Module system:
+`exportFromJSON` support CommonJS, EcmaScript Module, UMD importing
+
+`exportFromJSON` takes options as the [Types Chapter](#types) demonstrated, and it uses a [front-end downloader](https://github.com/zheeeng/export-from-json/blob/master/src/processors.ts) as the default processor option. In browser environment, there is a file content size limitation on the default processor, you can consider using a [server side solution](#in-node.js-server) by passing a custom processor.
+
+### In module system
 
 ```javascript
 import exportFromJSON from 'export-from-json'
@@ -42,10 +46,12 @@ const exportType = 'csv'
 exportFromJSON({ data, fileName, exportType })
 ```
 
-In browser: [codepen example](https://codepen.io/zheeeng/pen/PQxBKr)
+### In browser
+
+Check the [codepen example](https://codepen.io/zheeeng/pen/PQxBKr)
 
 ```javascript
-<script src="path/to/yourCopyOf/exportFromJSON.min.js"></script>
+<script src="https://unpkg.com/export-from-json/dist/umd/index.min.js"></script>
 <script>
     const data = [{ foo: 'foo'}, { bar: 'bar' }]
     const fileName = 'download'
@@ -55,6 +61,49 @@ In browser: [codepen example](https://codepen.io/zheeeng/pen/PQxBKr)
 </script>
 ```
 
+### In Node.js server
+
+`exportFromJSON` returns what the `processor` option returns, we can consider such a server side usage for providing converting/downloading service:
+
+```javascript
+const http = require('http')
+const exportFromJSON = require('export-from-json')
+
+http.createServer(function (request, response){
+    // exportFromJSON actually support passing JSON as the data option, it not very recommended.
+    const data = '[{"foo":"foo"},{"bar":"bar"}]'
+    const fileName = 'download'
+    const exportType = 'csv'
+
+    const result = exportFromJSON({
+        data,
+        fileName,
+        exportType,
+        process (content, type, fileName) {
+            switch (type) {
+                case 'txt':
+                    response.writeHead(200, {'Content-Type': 'text/plain'})
+                    break
+                case 'json':
+                    response.writeHead(200, {'Content-Type': 'text/plain'})
+                    break
+                case 'csv':
+                    response.writeHead(200, {'Content-Type': 'text/csv'})
+                    break
+                case 'xls':
+                    response.writeHead(200, {'Content-Type': 'application/vnd.ms-excel'})
+                    break
+            }
+            response.writeHead('Content-disposition', 'attachment;filename=' + fileName)
+            return content
+        }
+    })
+
+    response.write(result)
+    response.end()
+}).listen(8080, '127.0.0.1')
+```
+
 ## Types
 
 | Option name | Required | Type | Description
@@ -62,6 +111,7 @@ In browser: [codepen example](https://codepen.io/zheeeng/pen/PQxBKr)
 | data        | true     | `Array<JSON>` or `JSON` | 'txt' and 'json' export types support any valid JSON data. 'csv' and 'xls' export types support only JSON array.
 | fileName    | false    | string | filename without extension
 | exportType  | false    | Enum | 'txt', 'json', 'csv', 'xls'`
+| processor   | false    | (data: string, type: ExportType, fileName: string) => any
 
 You can also reference these export types through a mounted field `types`:
 

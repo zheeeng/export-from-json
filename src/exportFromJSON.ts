@@ -14,8 +14,8 @@ export interface IOption<R> {
 
 function exportFromJSON<R> ({
   data,
-  fileName = '',
-  exportType = 'json',
+  fileName = 'download',
+  exportType = 'txt',
   replacer = null,
   space = 4,
   processor = downloadFile as any,

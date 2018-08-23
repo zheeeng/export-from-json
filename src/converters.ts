@@ -1,17 +1,23 @@
 import { getKeys, getValues, getEntries } from './utils'
 
+export function _prepareData (data: object | string): object {
+  const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide a valid JSON'
+  try {
+    return typeof data === 'string' ? JSON.parse(data) as object : data
+  } catch {
+    throw new Error(MESSAGE_VALID_JSON_FAIL)
+  }
+}
+
 // TODO:: execute toSchema implicit converting
 export function _createJSONData (
   data: object,
   replacer: ((key: string, value: any) => any) | Array<number | string> | null = null,
   space: string | number,
 ) {
-  const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide JSON object'
+  const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide valid JSON object'
   try {
-    // tslint:disable-next-line:strict-type-predicates
-    const safeData: object = typeof data === 'string' ? JSON.parse(data) as object : data
-
-    return JSON.stringify(safeData, replacer as any, space)
+    return JSON.stringify(data, replacer as any, space)
   } catch {
     throw new Error(MESSAGE_VALID_JSON_FAIL)
   }

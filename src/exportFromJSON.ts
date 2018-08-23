@@ -1,10 +1,10 @@
 import { assertIsArray, normalizeFileName } from './utils'
 import { downloadFile } from './processors'
-import { _createJSONData, createCSVData, createXLSData } from './converters'
+import { _prepareData, _createJSONData, createCSVData, createXLSData } from './converters'
 import ExportType from './ExportType'
 
 export interface IOption<R> {
-  data: object
+  data: object | string
   fileName?: string
   exportType?: ExportType
   replacer?: ((key: string, value: any) => any) | Array<number | string> | null,
@@ -20,11 +20,12 @@ function exportFromJSON<R> ({
   space = 4,
   processor = downloadFile as any,
 }: IOption<R>): R {
-  const MESSAGE_IS_ARRAY_FAIL =
-    'Invalid export data. Please provide an array of object'
+  const MESSAGE_IS_ARRAY_FAIL = 'Invalid export data. Please provide an array of object'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`
 
-  const JSONData = _createJSONData(data, replacer, space)
+  const safeData = _prepareData(data)
+
+  const JSONData = _createJSONData(safeData, replacer, space)
 
   switch (exportType) {
     case 'txt': {
@@ -34,14 +35,14 @@ function exportFromJSON<R> ({
       return processor(JSONData, exportType, normalizeFileName(fileName, 'json'))
     }
     case 'csv': {
-      assertIsArray(data, MESSAGE_IS_ARRAY_FAIL)
-      const content = createCSVData(data as any[])
+      assertIsArray(safeData, MESSAGE_IS_ARRAY_FAIL)
+      const content = createCSVData(safeData as any[])
 
       return processor(content, exportType, normalizeFileName(fileName, 'csv'))
     }
     case 'xls': {
-      assertIsArray(data, MESSAGE_IS_ARRAY_FAIL)
-      const content = createXLSData(data as any[])
+      assertIsArray(safeData, MESSAGE_IS_ARRAY_FAIL)
+      const content = createXLSData(safeData as any[])
 
       return processor(content, exportType, normalizeFileName(fileName, 'xls'))
     }

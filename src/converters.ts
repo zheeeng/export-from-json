@@ -8,7 +8,10 @@ export function _createJSONData (
 ) {
   const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide JSON object'
   try {
-    return JSON.stringify(data, replacer as any, space)
+    // tslint:disable-next-line:strict-type-predicates
+    const safeData: object = typeof data === 'string' ? JSON.parse(data) as object : data
+
+    return JSON.stringify(safeData, replacer as any, space)
   } catch {
     throw new Error(MESSAGE_VALID_JSON_FAIL)
   }

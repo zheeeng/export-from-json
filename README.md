@@ -1,4 +1,4 @@
-# Export From JSON
+<h1 align="center">Export From JSON</h1>
 
 <div align="center">
 
@@ -70,7 +70,7 @@ const http = require('http')
 const exportFromJSON = require('export-from-json')
 
 http.createServer(function (request, response){
-    // exportFromJSON actually support passing JSON as the data option. It's very common that reading it from http request directly.
+    // exportFromJSON actually supports passing JSON as the data option. It's very common that reading it from http request directly.
     const data = '[{"foo":"foo"},{"bar":"bar"}]'
     const fileName = 'download'
     const exportType = 'txt'

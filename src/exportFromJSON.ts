@@ -9,7 +9,8 @@ export interface IOption<R> {
   exportType?: ExportType
   replacer?: ((key: string, value: any) => any) | Array<number | string> | null,
   space?: string | number
-  processor?: (content: string, type: ExportType, fileName: string) => R
+  processor?: (content: string, type: ExportType, fileName: string) => R,
+  withBOM?: boolean,
 }
 
 function exportFromJSON<R> ({
@@ -19,6 +20,7 @@ function exportFromJSON<R> ({
   replacer = null,
   space = 4,
   processor = downloadFile as any,
+  withBOM = false,
 }: IOption<R>): R {
   const MESSAGE_IS_ARRAY_FAIL = 'Invalid export data. Please provide an array of object'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`
@@ -36,7 +38,9 @@ function exportFromJSON<R> ({
     }
     case 'csv': {
       assertIsArray(safeData, MESSAGE_IS_ARRAY_FAIL)
-      const content = createCSVData(safeData as any[])
+      const BOM = '\ufeff'
+      const CSVData = createCSVData(safeData as any[])
+      const content = withBOM ? BOM + CSVData : CSVData
 
       return processor(content, exportType, normalizeFileName(fileName, 'csv'))
     }

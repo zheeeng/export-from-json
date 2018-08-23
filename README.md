@@ -70,7 +70,7 @@ const http = require('http')
 const exportFromJSON = require('export-from-json')
 
 http.createServer(function (request, response){
-    // exportFromJSON actually support passing JSON as the data option, it not very recommended.
+    // exportFromJSON actually support passing JSON as the data option. It's very common that reading it from http request.
     const data = '[{"foo":"foo"},{"bar":"bar"}]'
     const fileName = 'download'
     const exportType = 'csv'
@@ -106,12 +106,14 @@ http.createServer(function (request, response){
 
 ## Types
 
+**Note:** `JSON` here refers to parsable JSON object or string.
+
 | Option name | Required | Type | Description
 | ----------- | -------- | ---- | ----
-| data        | true     | `Array<JSON>` or `JSON` | 'txt' and 'json' export types support any valid JSON data. 'csv' and 'xls' export types support only JSON array.
+| data        | true     | `Array<JSON>` or `JSON` | If the exportType is 'txt' or 'json', data can be any parsable JSON. If the exportType is 'csv' or 'xls', data can only be an array of parsable JSON.
 | fileName    | false    | string | filename without extension, default to 'download'
-| exportType  | false    | Enum | 'txt'(default), 'json', 'csv', 'xls'`
-| processor   | false    | (data: string, type: ExportType, fileName: string) => any | default to a front-end downloader
+| exportType  | false    | Enum ExportType | 'txt'(default), 'json', 'csv', 'xls'`
+| processor   | false    | (content: string, type: ExportType, fileName: string) => any | default to a front-end downloader
 
 You can also reference these export types through a mounted field `types`:
 

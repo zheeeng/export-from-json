@@ -9,7 +9,7 @@ export interface IOption<R> {
   exportType?: ExportType
   replacer?: ((key: string, value: any) => any) | Array<number | string> | null,
   space?: string | number
-  processor?: (data: string, type: ExportType, fileName: string) => R
+  processor?: (content: string, type: ExportType, fileName: string) => R
 }
 
 function exportFromJSON<R> ({

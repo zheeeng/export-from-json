@@ -106,7 +106,7 @@ http.createServer(function (request, response){
 
 ## Types
 
-**Note:** `JSON` here refers to parsable JSON object or string.
+**Note:** `JSON` here refers to parsable JSON string or a serializable JavaScript object.
 
 | Option name | Required | Type | Description
 | ----------- | -------- | ---- | ----

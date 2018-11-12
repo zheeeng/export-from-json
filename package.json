@@ -41,7 +41,7 @@
     "husky": "^1.0.0",
     "jest": "^23.5.0",
     "rollup": "^0.67.0",
-    "rollup-plugin-typescript2": "^0.17.0",
+    "rollup-plugin-typescript2": "^0.18.0",
     "rollup-plugin-uglify": "^6.0.0",
     "ts-jest": "^23.1.4",
     "tslint": "^5.11.0",

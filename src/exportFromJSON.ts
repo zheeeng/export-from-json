@@ -1,6 +1,6 @@
 import { assertIsArray, normalizeFileName } from './utils'
 import { downloadFile } from './processors'
-import { _prepareData, _createJSONData, createCSVData, createXLSData } from './converters'
+import { _prepareData, _createJSONData, createCSVData, createXLSData, createXMLData } from './converters'
 import ExportType from './ExportType'
 
 export interface IOption<R> {
@@ -50,6 +50,13 @@ function exportFromJSON<R> ({
 
       return processor(content, exportType, normalizeFileName(fileName, 'xls'))
     }
+    case 'xml': {
+      var rootname = "base";
+      var header = `<?xml version="1.0" encoding="utf-8"?><!DOCTYPE ${rootname}>`;
+      const content = createXMLData(safeData as any[], rootname);
+
+      return processor(header + content, exportType, normalizeFileName(fileName, 'xml'));
+    }
     default:
       throw new Error(MESSAGE_UNKNOWN_EXPORT_TYPE)
   }
@@ -61,6 +68,7 @@ namespace exportFromJSON {
     json : 'json',
     csv : 'csv',
     xls : 'xls',
+    xml : 'xml',
   }
   export const processors = { downloadFile }
 }

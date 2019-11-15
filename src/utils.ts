@@ -24,3 +24,13 @@ export function normalizeFileName (fileName: string, extension: string) {
 
   return fileName.replace(/\s+/, '_').replace(extensionPattern, suffix)
 }
+
+export function normalizeXMLName(data: string){
+  return data.trim().replace(new RegExp(`^xml|[^a-zA-Z0-9 _\\-\\.:]+`,'gim'), "").replace(new RegExp(' ', 'gim'), '-').toLowerCase();
+}
+
+export function stripHTML(data: string) {
+  var tmp = document.createElement("DIV");
+  tmp.innerHTML = data;
+  return tmp.textContent || tmp.innerText;
+}

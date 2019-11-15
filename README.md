@@ -2,7 +2,7 @@
 
 <div align="center">
 
-Export to plain text, json, csv, xls files from JSON.
+Export to plain text, json, csv, xls, xml files from JSON.
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/zheeeng/export-from-json.svg)](https://greenkeeper.io/)
 [![language](https://img.shields.io/badge/%3C%2F%3E-TypeScript-blue.svg)](http://typescriptlang.org/)

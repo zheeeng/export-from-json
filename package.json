@@ -1,11 +1,12 @@
 {
   "name": "export-from-json",
-  "version": "1.1.4",
-  "description": "Export to txt, json, csv, xls format file from valid JavaScript JSON object.",
+  "version": "1.2.0",
+  "description": "Export to txt, json, csv, xls, xml format file from valid JavaScript JSON object.",
   "keywords": [
     "json",
     "csv",
     "xls",
+    "xml",
     "excel",
     "typescript"
   ],

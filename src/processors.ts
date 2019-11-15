@@ -14,6 +14,9 @@ export function generateDataURI (content: string, type: ExportType): string {
     case 'xls': {
       return 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(content)
     }
+    case 'xml': {
+      return 'data:application/xml;charset=utf-8,' + encodeURIComponent(content)
+    }
     default : {
       return ''
     }

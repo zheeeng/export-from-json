@@ -28,7 +28,7 @@
     "test:manual": "npm test && npm run build && open example/index.html",
     "precommit": "npm test",
     "prepush": "npm test",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "release": "npm version patch && npm publish"
   },
   "files": [
@@ -38,14 +38,14 @@
   ],
   "devDependencies": {
     "@types/jest": "^24.0.11",
-    "husky": "^3.0.0",
+    "husky": "^3.1.0",
     "jest": "^24.8.0",
-    "rollup": "^1.6.0",
-    "rollup-plugin-typescript2": "^0.25.0",
-    "rollup-plugin-uglify": "^6.0.2",
-    "ts-jest": "^24.0.0",
-    "tslint": "^5.11.0",
-    "typescript": "^3.3.3333"
+    "rollup": "^1.27.5",
+    "rollup-plugin-typescript2": "^0.25.2",
+    "rollup-plugin-uglify": "^6.0.3",
+    "ts-jest": "^24.2.0",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2"
   },
   "jest": {
     "transform": {

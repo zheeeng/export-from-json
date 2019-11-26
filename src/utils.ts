@@ -1,7 +1,11 @@
 import { Entry } from './interface'
 
+export function isArray (data: any): data is any[] {
+  return Object.prototype.toString.call(data) === '[object Array]'
+}
+
 export function assertIsArray (data: any, message: string) {
-  if (Object.prototype.toString.call(data) !== '[object Array]') {
+  if (!isArray(data)) {
     throw new Error(message)
   }
 }
@@ -25,12 +29,19 @@ export function normalizeFileName (fileName: string, extension: string) {
   return fileName.replace(/\s+/, '_').replace(extensionPattern, suffix)
 }
 
-export function normalizeXMLName(data: string){
-  return data.trim().replace(new RegExp(`^xml|[^a-zA-Z0-9 _\\-\\.:]+`,'gim'), "").replace(new RegExp(' ', 'gim'), '-').toLowerCase();
+export function normalizeXMLName (name: string) {
+  '555xmlHello .  world!'.trim().replace(/^([0-9,;]|(xml))+/, '')
+
+  return name.replace(/[^_a-zA-Z 0-9:\-\.]/g, '').replace(/^([ 0-9-:\-\.]|(xml))+/i, '').replace(/ +/g, '-')
 }
 
-export function stripHTML(data: string) {
-  var tmp = document.createElement("DIV");
-  tmp.innerHTML = data;
-  return tmp.textContent || tmp.innerText;
+export function stripHTML (text: string) {
+  return text.replace(/([<>&])/g, (_, $1) => {
+    switch ($1) {
+      case '<': return '&lt;'
+      case '>': return '&gt;'
+      case '&': return '&amp;'
+      default: return ''
+    }
+  })
 }

@@ -1,4 +1,4 @@
-import { getKeys, getValues, getEntries, normalizeXMLName, stripHTML } from './utils'
+import { isArray, getKeys, getValues, getEntries, normalizeXMLName, stripHTML } from './utils'
 
 export function _prepareData (data: object | string): object {
   const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide a valid JSON'
@@ -87,25 +87,29 @@ export function createXLSData (data: any[]) {
   `
 }
 
-export function createXMLData(data: any[], rootname: string) {
-  var tag = function (name: string, closing: boolean) {
-    return "<" + (closing ? "/" : "") + normalizeXMLName(name) + ">";
-  };
-  var xml = '';
-  for (var i in data) {
-      if (data.hasOwnProperty(i)) {
-          var value = data[i],
-              type = typeof value;
-          if (value instanceof Array && type == 'object') {
-              for (var sub in value) {
-                  xml += createXMLData(value[sub], '');
-              }
-          } else if (value instanceof Object && type == 'object') {
-              xml += tag(i, false) + createXMLData(value, '') + tag(i, true);
-          } else {
-              xml += tag(i, false) + stripHTML(value) + tag(i, true);
-          }
-      }
+export function createXMLData (data: object) {
+  return `
+    <?xml version="1.0" encoding="utf-8"?><!DOCTYPE base>
+    ${_renderXML(data, 'base')}
+  `
+}
+
+function _renderXML (data: any, tagName: string, arrayElementTag = 'element'): string {
+  const tag = normalizeXMLName(tagName)
+
+  if (data === null || data === undefined) {
+    return `<${tag} />`
   }
-  return rootname ? tag(rootname, false) + xml + tag(rootname, true) : xml;
+
+  return `
+    <${tag}>
+      ${isArray(data)
+        ? data.map(item => _renderXML(item, arrayElementTag, arrayElementTag)).join('')
+        : typeof data === 'object'
+          ? getEntries(data as Record<string, any>).map(([key, value]) => _renderXML(value, key)).join('')
+          // tslint:disable-next-line: no-unsafe-any
+          : stripHTML(data.toString())
+      }
+    </${tag}>
+  `
 }

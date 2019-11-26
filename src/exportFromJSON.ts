@@ -51,11 +51,9 @@ function exportFromJSON<R> ({
       return processor(content, exportType, normalizeFileName(fileName, 'xls'))
     }
     case 'xml': {
-      var rootname = "base";
-      var header = `<?xml version="1.0" encoding="utf-8"?><!DOCTYPE ${rootname}>`;
-      const content = createXMLData(safeData as any[], rootname);
+      const content = createXMLData(safeData as any[])
 
-      return processor(header + content, exportType, normalizeFileName(fileName, 'xml'));
+      return processor(content, exportType, normalizeFileName(fileName, 'xml'))
     }
     default:
       throw new Error(MESSAGE_UNKNOWN_EXPORT_TYPE)

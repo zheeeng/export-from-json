@@ -35,6 +35,10 @@ export function normalizeXMLName (name: string) {
   return name.replace(/[^_a-zA-Z 0-9:\-\.]/g, '').replace(/^([ 0-9-:\-\.]|(xml))+/i, '').replace(/ +/g, '-')
 }
 
+export function indent (spaces: number) {
+  return Array(spaces + 1).join(' ')
+}
+
 export function stripHTML (text: string) {
   return text.replace(/([<>&])/g, (_, $1) => {
     switch ($1) {

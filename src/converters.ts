@@ -1,4 +1,4 @@
-import { isArray, getKeys, getValues, getEntries, normalizeXMLName, stripHTML } from './utils'
+import { isArray, getKeys, getValues, getEntries, normalizeXMLName, indent, stripHTML } from './utils'
 
 export function _prepareData (data: object | string): object {
   const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide a valid JSON'
@@ -68,48 +68,64 @@ export function _renderTableHTMLText (data: any[]) {
 
   return `
     <table>
-      <thead><tr><th><b>${head.join('</b></th><th><b>')}</b></th></tr></thead>
-      <tbody><tr>${rows.join('</tr><tr>')}</tr></tbody>
+      <thead>
+        <tr><th><b>${head.join('</b></th><th><b>')}</b></th></tr>
+      </thead>
+      <tbody>
+        <tr>${rows.join(`</tr>
+        <tr>`)}</tr>
+      </tbody>
     </table>
   `
 }
 
 export function createXLSData (data: any[]) {
-  return `
-    <html>
-      <head>
-        <meta charset="UTF-8">
-      </head >
-      <body>
-        ${_renderTableHTMLText(data)}
-      </body>
-    </html >
-  `
+  const content =
+
+`<html>
+  <head>
+    <meta charset="UTF-8">
+  </head >
+  <body>
+    ${_renderTableHTMLText(data)}
+  </body>
+</html >
+`
+
+  return content
 }
 
 export function createXMLData (data: object) {
-  return `
-    <?xml version="1.0" encoding="utf-8"?><!DOCTYPE base>
-    ${_renderXML(data, 'base')}
-  `
+  const content =
+
+`<?xml version="1.0" encoding="utf-8"?><!DOCTYPE base>
+${_renderXML(data, 'base')}
+`
+
+  return content
 }
 
-function _renderXML (data: any, tagName: string, arrayElementTag = 'element'): string {
+function _renderXML (data: any, tagName: string, arrayElementTag = 'element', spaces = 0): string {
   const tag = normalizeXMLName(tagName)
+  const indentSpaces = indent(spaces)
 
   if (data === null || data === undefined) {
-    return `<${tag} />`
+    return `${indentSpaces}<${tag} />`
   }
 
-  return `
-    <${tag}>
-      ${isArray(data)
-        ? data.map(item => _renderXML(item, arrayElementTag, arrayElementTag)).join('')
-        : typeof data === 'object'
-          ? getEntries(data as Record<string, any>).map(([key, value]) => _renderXML(value, key)).join('')
-          // tslint:disable-next-line: no-unsafe-any
-          : stripHTML(data.toString())
-      }
-    </${tag}>
-  `
+  const content = isArray(data)
+      ? data.map(item => _renderXML(item, arrayElementTag, arrayElementTag, spaces + 2)).join('\n')
+      : typeof data === 'object'
+      ? getEntries(data as Record<string, any>)
+        .map(([key, value]) => _renderXML(value, key, arrayElementTag, spaces + 2)).join('\n')
+      // tslint:disable-next-line: no-unsafe-any
+      : indentSpaces + '  ' + stripHTML(data.toString())
+
+  const contentWithWrapper =
+
+`${indentSpaces}<${tag}>
+${content}
+${indentSpaces}</${tag}>`
+
+  return contentWithWrapper
 }

@@ -1,5 +1,3 @@
-import { Entry } from './interface'
-
 export function isArray (data: any): data is any[] {
   return Object.prototype.toString.call(data) === '[object Array]'
 }
@@ -10,16 +8,16 @@ export function assertIsArray (data: any, message: string) {
   }
 }
 
-export function getValues<T> (data: { [key: string]: T }) {
+export function getValues<T> (data: Record<string, T>) {
   return Object.keys(data).map(key => data[key])
 }
 
-export function getKeys<T> (data: { [key: string]: T }) {
+export function getKeys<T> (data: Record<string, T>) {
   return Object.keys(data)
 }
 
-export function getEntries<T> (data: { [key: string]: T }) {
-  return Object.keys(data).map(key => [key, data[key]] as Entry<T>)
+export function getEntries<T> (data: Record<string, T>) {
+  return Object.keys(data).map(key => [key, data[key]] as [string, T])
 }
 
 export function normalizeFileName (fileName: string, extension: string) {

@@ -13,7 +13,7 @@ export interface IOption<R> {
   withBOM?: boolean,
 }
 
-function exportFromJSON<R> ({
+function exportFromJSON<R = void> ({
   data,
   fileName = 'download',
   exportType = 'txt',

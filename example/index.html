@@ -1,3 +1,4 @@
+<h1>Input:</h1>
 <pre id="data" style="padding: 8px; border: whitesmoke double 4px; background-color: lightgray; ">
 [
     {
@@ -32,12 +33,22 @@
 <button onclick="download('csv')">download CSV file</button>
 <button onclick="download('xls')">download XLS file(Excel)</button>
 <button onclick="download('xml')">download XML file</button>
+<hr />
+<button onclick="show('txt')">show plain text file</button>
+<button onclick="show('json')">show JSON file</button>
+<button onclick="show('csv')">show CSV file</button>
+<button onclick="show('xls')">show XLS file(Excel)</button>
+<button onclick="show('xml')">show XML file</button>
+
+<h1>Output:</h1>
+<pre id="content" style="padding: 8px; border: whitesmoke double 4px; background-color: lightgray; "></pre>
 
 <script src="../dist/umd/index.js"></script>
 <script>
     const exportFromJSON = window.exportFromJSON
     const $data = document.getElementById('data')
     const $fileName = document.getElementById('fileName')
+    const $content = document.getElementById('content')
 
     document.body.addEventListener('click', (e) => {
         if (e.target === $data) {
@@ -52,5 +63,13 @@
         const data = JSON.parse($data.innerText)
 
         exportFromJSON({ data, fileName, exportType })
+    }
+
+    function show (exportType) {
+        const fileName = $fileName.value
+        const data = JSON.parse($data.innerText)
+
+        const output = exportFromJSON({ data, fileName, exportType, processor: content => content })
+        $content.innerText = output
     }
 </script>

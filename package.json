@@ -39,7 +39,7 @@
   ],
   "devDependencies": {
     "@types/jest": "^24.0.11",
-    "husky": "^3.1.0",
+    "husky": "^4.0.2",
     "jest": "^24.8.0",
     "rollup": "^1.27.5",
     "rollup-plugin-typescript2": "^0.25.2",

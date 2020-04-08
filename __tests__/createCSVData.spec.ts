@@ -4,3 +4,7 @@ import { createCSVData } from '../src/converters'
 it('createCSVData works correctly', () => {
   expect(createCSVData(testTableItems)).toMatchSnapshot()
 })
+
+it('createCSVData works correctly', () => {
+  expect(createCSVData(testTableItems, ";")).toMatchSnapshot()
+})

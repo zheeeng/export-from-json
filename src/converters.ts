@@ -49,10 +49,10 @@ export function _createTableMap (data: any[]): ITableMap {
 
 export function createCSVData (data: any[]) {
   const tableMap = _createTableMap(data)
-  const head = getKeys(tableMap).join(',') + '\r\n'
+  const head = getKeys(tableMap).join(';') + '\r\n'
   const columns = getValues(tableMap).map(column => column.map(value => `"${value.replace(/\"/g, '""')}"`))
   const rows = columns.reduce(
-    (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value},${column[rowIndex]}`),
+    (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value};${column[rowIndex]}`),
   )
 
   return head + rows.join('\r\n')

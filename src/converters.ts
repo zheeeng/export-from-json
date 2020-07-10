@@ -53,6 +53,7 @@ export function createCSVData (data: any[], delimiter: string = ',') {
   const columns = getValues(tableMap).map(column => column.map(value => `"${value.replace(/\"/g, '""')}"`))
   const rows = columns.reduce(
     (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value}${delimiter}${column[rowIndex]}`),
+    [],
   )
 
   return head + rows.join('\r\n')

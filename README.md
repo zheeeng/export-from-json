@@ -30,9 +30,9 @@ npm i --save export-from-json
 
 ## Usage
 
-`exportFromJSON` support CommonJS, EcmaScript Module, UMD importing.
+`exportFromJSON` supports CommonJS, EcmaScript Module, UMD importing.
 
-`exportFromJSON` takes options as the [Types Chapter](#types) demonstrated, and it uses a [front-end downloader](https://github.com/zheeeng/export-from-json/blob/master/src/processors.ts) as the default processor option. In browser environment, there is a file content size limitation on the default processor, you can consider using a [server side solution](#in-nodejs-serverr) by passing a custom processor.
+`exportFromJSON` receives the option as the [Types Chapter](#types) demonstrated, and it uses a [front-end downloader](https://github.com/zheeeng/export-from-json/blob/master/src/processors.ts) as the default processor. In browser environment, there is a content size limitation on the default processor, consider using the [server side solution](#in-nodejs-server).
 
 ### In module system
 
@@ -63,7 +63,7 @@ Check the [codepen example](https://codepen.io/zheeeng/pen/PQxBKr)
 
 ### In Node.js server
 
-`exportFromJSON` returns what the `processor` option returns, we can consider such a server side usage for providing converting/downloading service:
+`exportFromJSON` returns what the option `processor` returns, we can use it on server side for providing a converting/downloading service:
 
 ```javascript
 const http = require('http')
@@ -106,7 +106,7 @@ http.createServer(function (request, response){
 
 ## Types
 
-**Note:** `JSON` here refers to parsable JSON string or a serializable JavaScript object.
+**Note:** `JSON` refers to a parsable JSON string or a serializable JavaScript object.
 
 | Option name | Required | Type | Description
 | ----------- | -------- | ---- | ----
@@ -116,7 +116,7 @@ http.createServer(function (request, response){
 | processor   | false    | (content: string, type: ExportType, fileName: string) => any | default to a front-end downloader
 | withBOM     | false    | boolean | Add BOM(byte order mark) meta to CSV file. BOM is expected by `Excel` when reading UTF8 CSV file. It is default to false.
 
-You can also reference these export types through a mounted field `types`:
+You can also reference these exported types through a mounted static field `types`, e.g.
 
 ```js
 exportFromJSON({ data: jsonData, fileName: 'data', exportType: exportFromJSON.types.csv })

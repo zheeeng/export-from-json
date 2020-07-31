@@ -1,4 +1,4 @@
-import { assertIsArray, normalizeFileName } from './utils'
+import { assert, isArray, normalizeFileName } from './utils'
 import { downloadFile } from './processors'
 import { _prepareData, _createJSONData, createCSVData, createXLSData, createXMLData } from './converters'
 import ExportType from './ExportType'
@@ -39,16 +39,16 @@ function exportFromJSON<R = void> ({
       return processor(JSONData, exportType, normalizeFileName(fileName, 'json'))
     }
     case 'csv': {
-      assertIsArray(safeData, MESSAGE_IS_ARRAY_FAIL)
+      assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
       const BOM = '\ufeff'
-      const CSVData = createCSVData(safeData as any[], delimiter)
+      const CSVData = createCSVData(safeData, delimiter)
       const content = withBOM ? BOM + CSVData : CSVData
 
       return processor(content, exportType, normalizeFileName(fileName, 'csv'))
     }
     case 'xls': {
-      assertIsArray(safeData, MESSAGE_IS_ARRAY_FAIL)
-      const content = createXLSData(safeData as any[])
+      assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
+      const content = createXLSData(safeData)
 
       return processor(content, exportType, normalizeFileName(fileName, 'xls'))
     }

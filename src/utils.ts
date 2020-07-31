@@ -2,10 +2,8 @@ export function isArray (data: any): data is any[] {
   return Object.prototype.toString.call(data) === '[object Array]'
 }
 
-export function assertIsArray (data: any, message: string) {
-  if (!isArray(data)) {
-    throw new Error(message)
-  }
+export function assert (condition: any, msg?: string): asserts condition {
+  if (!condition) throw new Error(msg)
 }
 
 export function getValues<T> (data: Record<string, T>) {

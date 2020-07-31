@@ -1,4 +1,4 @@
-import { isArray, getKeys, getValues, getEntries, normalizeXMLName, indent, stripHTML } from './utils'
+import { isArray, getKeys, getValues, getEntries, normalizeXMLName, indent, stripHTML, assert } from './utils'
 
 export function _prepareData (data: object | string): object {
   const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide a valid JSON'
@@ -48,18 +48,21 @@ export function _createTableMap (data: any[]): ITableMap {
 }
 
 export function createCSVData (data: any[], delimiter: string = ',') {
+  if (!data.length) return ''
+
   const tableMap = _createTableMap(data)
   const head = getKeys(tableMap).join(delimiter) + '\r\n'
   const columns = getValues(tableMap).map(column => column.map(value => `"${value.replace(/\"/g, '""')}"`))
   const rows = columns.reduce(
     (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value}${delimiter}${column[rowIndex]}`),
-    [],
   )
 
   return head + rows.join('\r\n')
 }
 
 export function _renderTableHTMLText (data: any[]) {
+  assert(data.length > 0)
+
   const tableMap = _createTableMap(data)
   const head = getKeys(tableMap)
   const columns = getValues(tableMap).map(column => column.map(value => `<td>${value}</td>`))
@@ -81,6 +84,8 @@ export function _renderTableHTMLText (data: any[]) {
 }
 
 export function createXLSData (data: any[]) {
+  if (!data.length) return ''
+
   const content =
 
 `<html>
@@ -115,12 +120,11 @@ function _renderXML (data: any, tagName: string, arrayElementTag = 'element', sp
   }
 
   const content = isArray(data)
-      ? data.map(item => _renderXML(item, arrayElementTag, arrayElementTag, spaces + 2)).join('\n')
-      : typeof data === 'object'
+    ? data.map(item => _renderXML(item, arrayElementTag, arrayElementTag, spaces + 2)).join('\n')
+    : typeof data === 'object'
       ? getEntries(data as Record<string, any>)
         .map(([key, value]) => _renderXML(value, key, arrayElementTag, spaces + 2)).join('\n')
-      // tslint:disable-next-line: no-unsafe-any
-      : indentSpaces + '  ' + stripHTML(data.toString())
+      : indentSpaces + '  ' + stripHTML(String(data))
 
   const contentWithWrapper =
 

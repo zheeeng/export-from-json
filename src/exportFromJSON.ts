@@ -63,7 +63,7 @@ function exportFromJSON<R = void> ({
 }
 
 namespace exportFromJSON {
-  export const types = {
+  export const types: Record<ExportType, ExportType> = {
     txt : 'txt',
     json : 'json',
     csv : 'csv',

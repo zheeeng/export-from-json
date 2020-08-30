@@ -112,7 +112,7 @@ http.createServer(function (request, response){
 | ----------- | -------- | ---- | ----
 | data        | true     | `Array<JSON>` or `JSON` | If the exportType is 'txt' or 'json', data can be any parsable JSON. If the exportType is 'csv' or 'xls', data can only be an array of parsable JSON.
 | fileName    | false    | string | filename without extension, default to 'download'
-| exportType  | false    | Enum ExportType | 'txt'(default), 'json', 'csv', 'xls'`
+| exportType  | false    | Enum ExportType | 'txt'(default), 'json', 'csv', 'xls', 'xml'`
 | processor   | false    | (content: string, type: ExportType, fileName: string) => any | default to a front-end downloader
 | withBOM     | false    | boolean | Add BOM(byte order mark) meta to CSV file. BOM is expected by `Excel` when reading UTF8 CSV file. It is default to false.
 

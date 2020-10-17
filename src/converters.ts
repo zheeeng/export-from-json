@@ -1,4 +1,4 @@
-import { isArray, getKeys, getValues, getEntries, normalizeXMLName, indent, stripHTML, assert } from './utils'
+import { isArray, getEntries, normalizeXMLName, indent, stripHTML, assert } from './utils'
 
 export function _prepareData (data: object | string): object {
   const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide a valid JSON'
@@ -31,9 +31,7 @@ export function _createTableMap (data: any[]): ITableMap {
   return data.map(getEntries).reduce(
     (tMap, rowKVs, rowIndex) =>
       rowKVs.reduce(
-        (map, kv) => {
-          const key = kv[0]
-          const value = kv[1]
+        (map, [key, value]) => {
           const columnValues = map[key] || Array.from({ length: data.length }).map(_ => '')
           columnValues[rowIndex] =
             (typeof value !== 'string' ? JSON.stringify(value) : value) || ''
@@ -47,12 +45,24 @@ export function _createTableMap (data: any[]): ITableMap {
   ) as ITableMap
 }
 
+export interface ITableEntries extends Array<{ fieldName: string, fieldValues: string[] }> {}
+
+export function _createTableEntries (tableMap: ITableMap): ITableEntries {
+  return getEntries(tableMap).map(([fieldName, fieldValues]) => ({
+    fieldName,
+    fieldValues,
+  }))
+}
+
 export function createCSVData (data: any[], delimiter: string = ',') {
   if (!data.length) return ''
 
   const tableMap = _createTableMap(data)
-  const head = getKeys(tableMap).join(delimiter) + '\r\n'
-  const columns = getValues(tableMap).map(column => column.map(value => `"${value.replace(/\"/g, '""')}"`))
+  const tableEntries = _createTableEntries(tableMap)
+  const head = tableEntries.map(({ fieldName }) => fieldName)
+    .join(delimiter) + '\r\n'
+  const columns = tableEntries.map(({ fieldValues }) => fieldValues)
+    .map(column => column.map(value => `"${value.replace(/\"/g, '""')}"`))
   const rows = columns.reduce(
     (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value}${delimiter}${column[rowIndex]}`),
   )
@@ -64,16 +74,20 @@ export function _renderTableHTMLText (data: any[]) {
   assert(data.length > 0)
 
   const tableMap = _createTableMap(data)
-  const head = getKeys(tableMap)
-  const columns = getValues(tableMap).map(column => column.map(value => `<td>${value}</td>`))
+  const tableEntries = _createTableEntries(tableMap)
+  const head = tableEntries.map(({ fieldName }) => fieldName)
+    .join('</b></th><th><b>')
+  const columns = tableEntries.map(({ fieldValues }) => fieldValues)
+    .map(column => column.map(value => `<td>${value}</td>`))
   const rows = columns.reduce(
-    (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value}${column[rowIndex]}`),
+    (mergedColumn, column) => mergedColumn
+      .map((value, rowIndex) => `${value}${column[rowIndex]}`),
   )
 
   return `
     <table>
       <thead>
-        <tr><th><b>${head.join('</b></th><th><b>')}</b></th></tr>
+        <tr><th><b>${head}</b></th></tr>
       </thead>
       <tbody>
         <tr>${rows.join(`</tr>

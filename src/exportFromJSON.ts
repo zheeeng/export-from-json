@@ -6,6 +6,7 @@ import ExportType from './ExportType'
 export interface IOption<R> {
   data: object | string
   fileName?: string
+  fields: string[] | {}
   exportType?: ExportType
   replacer?: ((key: string, value: any) => any) | Array<number | string> | null,
   space?: string | number

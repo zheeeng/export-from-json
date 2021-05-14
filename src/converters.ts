@@ -36,7 +36,7 @@ export function _createFieldsMapper (fields?: string[] | Record<string, string>)
 
     return getEntries<unknown>(item).reduce(
       (map, [key, value]) => {
-        if (mapper[key] in item) {
+        if (key in mapper) {
           map[mapper[key]] = value
         }
 
@@ -94,18 +94,21 @@ export function _createTableMap (data: any[]): ITableMap {
 
 export interface ITableEntries extends Array<{ fieldName: string, fieldValues: string[] }> {}
 
-export function _createTableEntries (tableMap: ITableMap): ITableEntries {
-  return getEntries(tableMap).map(([fieldName, fieldValues]) => ({
+export function _createTableEntries (
+  tableMap: ITableMap,
+  beforeTableEncode: (entries: ITableEntries) => ITableEntries = i => i,
+): ITableEntries {
+  return beforeTableEncode(getEntries(tableMap).map(([fieldName, fieldValues]) => ({
     fieldName,
     fieldValues,
-  }))
+  })))
 }
 
-export function createCSVData (data: any[], delimiter: string = ',') {
+export function createCSVData (data: any[], delimiter: string = ',', beforeTableEncode: (entries: ITableEntries) => ITableEntries = i => i) {
   if (!data.length) return ''
 
   const tableMap = _createTableMap(data)
-  const tableEntries = _createTableEntries(tableMap)
+  const tableEntries = _createTableEntries(tableMap, beforeTableEncode)
   const head = tableEntries.map(({ fieldName }) => fieldName)
     .join(delimiter) + '\r\n'
   const columns = tableEntries.map(({ fieldValues }) => fieldValues)
@@ -117,11 +120,11 @@ export function createCSVData (data: any[], delimiter: string = ',') {
   return head + rows.join('\r\n')
 }
 
-export function _renderTableHTMLText (data: any[]) {
+export function _renderTableHTMLText (data: any[], beforeTableEncode: (entries: ITableEntries) => ITableEntries) {
   assert(data.length > 0)
 
   const tableMap = _createTableMap(data)
-  const tableEntries = _createTableEntries(tableMap)
+  const tableEntries = _createTableEntries(tableMap, beforeTableEncode)
   const head = tableEntries.map(({ fieldName }) => fieldName)
     .join('</b></th><th><b>')
   const columns = tableEntries.map(({ fieldValues }) => fieldValues)
@@ -144,7 +147,7 @@ export function _renderTableHTMLText (data: any[]) {
   `
 }
 
-export function createXLSData (data: any[]) {
+export function createXLSData (data: any[], beforeTableEncode: (entries: ITableEntries) => ITableEntries = i => i) {
   if (!data.length) return ''
 
   const content =
@@ -154,7 +157,7 @@ export function createXLSData (data: any[]) {
     <meta charset="UTF-8">
   </head >
   <body>
-    ${_renderTableHTMLText(data)}
+    ${_renderTableHTMLText(data, beforeTableEncode)}
   </body>
 </html >
 `
@@ -183,7 +186,7 @@ function _renderXML (data: any, tagName: string, arrayElementTag = 'element', sp
   const content = isArray(data)
     ? data.map(item => _renderXML(item, arrayElementTag, arrayElementTag, spaces + 2)).join('\n')
     : typeof data === 'object'
-      ? getEntries(data as Record<string, any>)
+      ? getEntries(data as Record<string, unknown>)
         .map(([key, value]) => _renderXML(value, key, arrayElementTag, spaces + 2)).join('\n')
       : indentSpaces + '  ' + stripHTML(String(data))
 

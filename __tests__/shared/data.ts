@@ -16,14 +16,88 @@ export const testTableMap = {
   f: ['', '', ''],
 }
 
+export const resultOfTestTableMap = [
+  {
+      fieldName: 'greeting',
+      fieldValues: ['hello', '', ''],
+  },
+  {
+      fieldName: 'foo',
+      fieldValues: ['', 'foo', ''],
+  },
+  {
+    fieldName: 'bar',
+    fieldValues: ['', 'bar', ''],
+  },
+  {
+      fieldName: 'a',
+      fieldValues: ['', '', '100'],
+  },
+  {
+      fieldName: 'b',
+      fieldValues: ['', '', JSON.stringify([1, 2, 3])],
+  },
+  {
+      fieldName: 'c',
+      fieldValues: ['', '', JSON.stringify({ x: 200, y: 300 })],
+  },
+  {
+      fieldName: 'd',
+      fieldValues: ['', '', 'D'],
+  },
+  {
+      fieldName: 'e',
+      fieldValues: ['', '', 'null'],
+  },
+  {
+      fieldName: 'f',
+      fieldValues: ['', '', ''],
+  },
+]
+
+export const sortedOfTestTableMap = [
+  {
+      fieldName: 'a',
+      fieldValues: ['', '', '100'],
+  },
+  {
+      fieldName: 'b',
+      fieldValues: ['', '', JSON.stringify([1, 2, 3])],
+  },
+  {
+      fieldName: 'bar',
+      fieldValues: ['', 'bar', ''],
+  },
+  {
+      fieldName: 'c',
+      fieldValues: ['', '', JSON.stringify({ x: 200, y: 300 })],
+  },
+  {
+      fieldName: 'd',
+      fieldValues: ['', '', 'D'],
+  },
+  {
+      fieldName: 'e',
+      fieldValues: ['', '', 'null'],
+  },
+  {
+      fieldName: 'f',
+      fieldValues: ['', '', ''],
+  },
+  {
+      fieldName: 'foo',
+      fieldValues: ['', 'foo', ''],
+  },
+  {
+      fieldName: 'greeting',
+      fieldValues: ['hello', '', ''],
+  }
+]
+
 export const fields1 = ['greeting']
-export const fieldsObj1 = { greeting: 'greeting' } 
 export const fieldsMapperObj1 = { greeting: 'greet' } 
 
 export const testTableItemsWithFields1 = [
-  { greeting: 'hello' },
-]
-export const testTableItemsWithFieldsObj1 = [
   { greeting: 'hello' },
 ]
 export const testTableItemsWithFieldsMapperObj1 = [
@@ -31,16 +105,12 @@ export const testTableItemsWithFieldsMapperObj1 = [
 ]
 
 export const fields2 = ['greeting', 'bar', 'd']
-export const fieldsObj2 = { greeting: 'greeting', 'bar': 'baz', 'd': 'ddd' } 
 export const fieldsMapperObj2 = { greeting: 'greet', 'bar': 'baz', 'd': 'ddd' } 
 
 export const testTableItemsWithFields2 = [
-  { greeting: 'hello', bar: 'bar', 'd': ['', '', 'D'] },
-]
-export const testTableItemsWithFieldsObj2 = [
-  { greeting: 'hello' , 'baz': 'bar', 'ddd': ['', '', 'D'] },
+  { greeting: 'hello' }, { bar: 'bar' }, { 'd': 'D' },
 ]
 export const testTableItemsWithFieldsMapperObj2 = [
-  { greet: 'hello', 'baz': 'bar', 'ddd': ['', '', 'D'] },
+  { greet: 'hello' }, { 'baz': 'bar' }, { 'ddd': 'D' },
 ]
 

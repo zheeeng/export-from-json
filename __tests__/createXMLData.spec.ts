@@ -6,5 +6,5 @@ it('createXMLData works correctly', () => {
 })
 
 it('createXMLData works with empty array', () => {
-  expect(createXMLData(testTableItems)).toMatchSnapshot()
+  expect(createXMLData([])).toMatchSnapshot()
 })

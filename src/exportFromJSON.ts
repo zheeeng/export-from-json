@@ -1,12 +1,11 @@
 import { assert, isArray, normalizeFileName } from './utils'
 import { downloadFile } from './processors'
-import { _prepareData, _createJSONData, createCSVData, createXLSData, createXMLData } from './converters'
+import { _prepareData, _createJSONData, createCSVData, createXLSData, createXMLData, _createFieldsMapper } from './converters'
 import ExportType from './ExportType'
-
 export interface IOption<R> {
   data: object | string
   fileName?: string
-  fields: string[] | {}
+  fields?: string[] | Record<string, string>
   exportType?: ExportType
   replacer?: ((key: string, value: any) => any) | Array<number | string> | null,
   space?: string | number
@@ -18,6 +17,7 @@ export interface IOption<R> {
 function exportFromJSON<R = void> ({
   data,
   fileName = 'download',
+  fields,
   exportType = 'txt',
   replacer = null,
   space = 4,
@@ -28,7 +28,9 @@ function exportFromJSON<R = void> ({
   const MESSAGE_IS_ARRAY_FAIL = 'Invalid export data. Please provide an array of object'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`
 
-  const safeData = _prepareData(data)
+  const fieldsMapper = _createFieldsMapper(fields)
+
+  const safeData = fieldsMapper(_prepareData(data))
 
   const JSONData = _createJSONData(safeData, replacer, space)
 
@@ -54,6 +56,7 @@ function exportFromJSON<R = void> ({
       return processor(content, exportType, normalizeFileName(fileName, 'xls'))
     }
     case 'xml': {
+      assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
       const content = createXMLData(safeData as any[])
 
       return processor(content, exportType, normalizeFileName(fileName, 'xml'))

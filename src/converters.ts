@@ -1,9 +1,56 @@
-import { isArray, getEntries, normalizeXMLName, indent, stripHTML, assert } from './utils'
+import { isArray, getEntries, normalizeXMLName, indent, stripHTML, assert, getKeys } from './utils'
 
-export function _prepareData (data: object | string): object {
+export function _createFieldsMapper (fields?: string[] | Record<string, string>) {
+  if (
+    !fields
+    || isArray(fields) && !fields.length
+    || !isArray(fields) && !getKeys(fields).length
+  ) return (item: Record<string, unknown> | Array<Record<string, unknown>>) => item
+
+  const mapper = isArray(fields)
+    ? fields.reduce(
+        (map, key) => ({ ...map, [key]: key}),
+        Object.create(null) as Record<string, string>,
+      )
+    : fields
+
+  return (item: Record<string, unknown> | Array<Record<string, unknown>>) => {
+    if (isArray(item)) {
+      return item
+        .map(
+          i => getEntries<unknown>(i).reduce(
+            (map, [key, value]) => {
+              if (key in mapper) {
+                map[mapper[key]] = value
+              }
+
+              return map
+            },
+            Object.create(null) as Record<string, unknown>,
+          ),
+        )
+        .filter(
+          i => getKeys(i).length
+        )
+    }
+
+    return getEntries<unknown>(item).reduce(
+      (map, [key, value]) => {
+        if (mapper[key] in item) {
+          map[mapper[key]] = value
+        }
+
+        return map
+      },
+      Object.create(null) as Record<string, unknown>,
+    )
+  }
+}
+
+export function _prepareData (data: object | string): Record<string, unknown> {
   const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide a valid JSON'
   try {
-    return typeof data === 'string' ? JSON.parse(data) as object : data
+    return (typeof data === 'string' ? JSON.parse(data) : data) as Record<string, unknown>
   } catch {
     throw new Error(MESSAGE_VALID_JSON_FAIL)
   }

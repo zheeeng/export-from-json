@@ -15,3 +15,32 @@ export const testTableMap = {
   e: ['', '', 'null'],
   f: ['', '', ''],
 }
+
+export const fields1 = ['greeting']
+export const fieldsObj1 = { greeting: 'greeting' } 
+export const fieldsMapperObj1 = { greeting: 'greet' } 
+
+export const testTableItemsWithFields1 = [
+  { greeting: 'hello' },
+]
+export const testTableItemsWithFieldsObj1 = [
+  { greeting: 'hello' },
+]
+export const testTableItemsWithFieldsMapperObj1 = [
+  { greet: 'hello' },
+]
+
+export const fields2 = ['greeting', 'bar', 'd']
+export const fieldsObj2 = { greeting: 'greeting', 'bar': 'baz', 'd': 'ddd' } 
+export const fieldsMapperObj2 = { greeting: 'greet', 'bar': 'baz', 'd': 'ddd' } 
+
+export const testTableItemsWithFields2 = [
+  { greeting: 'hello', bar: 'bar', 'd': ['', '', 'D'] },
+]
+export const testTableItemsWithFieldsObj2 = [
+  { greeting: 'hello' , 'baz': 'bar', 'ddd': ['', '', 'D'] },
+]
+export const testTableItemsWithFieldsMapperObj2 = [
+  { greet: 'hello', 'baz': 'bar', 'ddd': ['', '', 'D'] },
+]
+

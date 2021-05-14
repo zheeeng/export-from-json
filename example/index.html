@@ -39,7 +39,11 @@
 <button onclick="show('csv')">show CSV file</button>
 <button onclick="show('xls')">show XLS file(Excel)</button>
 <button onclick="show('xml')">show XML file</button>
-
+<hr />
+<label>
+    Use fields "Name", "Author", "subject":
+    <input id="useFields" type="checkbox" />
+</label>
 <h1>Output:</h1>
 <pre id="content" style="padding: 8px; border: whitesmoke double 4px; background-color: lightgray; "></pre>
 
@@ -49,6 +53,7 @@
     const $data = document.getElementById('data')
     const $fileName = document.getElementById('fileName')
     const $content = document.getElementById('content')
+    const $useFields = document.getElementById('useFields')
 
     document.body.addEventListener('click', (e) => {
         if (e.target === $data) {
@@ -61,15 +66,17 @@
     function download (exportType) {
         const fileName = $fileName.value
         const data = JSON.parse($data.innerText)
+        const fields = $useFields.value ? ['Name', 'Author', 'Subject'] : []
 
-        exportFromJSON({ data, fileName, exportType })
+        exportFromJSON({ data, fileName, fields, exportType })
     }
 
     function show (exportType) {
         const fileName = $fileName.value
         const data = JSON.parse($data.innerText)
+        const fields = $useFields.value ? ['Name', 'Author', 'Subject'] : []
 
-        const output = exportFromJSON({ data, fileName, exportType, processor: content => content })
+        const output = exportFromJSON({ data, fileName, fields, exportType, processor: content => content })
         $content.innerText = output
     }
 </script>

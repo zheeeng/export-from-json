@@ -5,6 +5,7 @@ import ExportType from './ExportType'
 export interface IOption<R> {
   data: object | string
   fileName?: string
+  fileNameFormatter?: (name: string) => string
   fields?: string[] | Record<string, string>
   exportType?: ExportType
   replacer?: ((key: string, value: any) => any) | Array<number | string> | null,
@@ -17,6 +18,7 @@ export interface IOption<R> {
 function exportFromJSON<R = void> ({
   data,
   fileName = 'download',
+  fileNameFormatter = name => name.replace(/\s+/, '_'),
   fields,
   exportType = 'txt',
   replacer = null,
@@ -36,10 +38,10 @@ function exportFromJSON<R = void> ({
 
   switch (exportType) {
     case 'txt': {
-      return processor(JSONData, exportType, normalizeFileName(fileName, 'txt'))
+      return processor(JSONData, exportType, normalizeFileName(fileName, 'txt', fileNameFormatter))
     }
     case 'json': {
-      return processor(JSONData, exportType, normalizeFileName(fileName, 'json'))
+      return processor(JSONData, exportType, normalizeFileName(fileName, 'json', fileNameFormatter))
     }
     case 'csv': {
       assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
@@ -47,19 +49,19 @@ function exportFromJSON<R = void> ({
       const CSVData = createCSVData(safeData, delimiter)
       const content = withBOM ? BOM + CSVData : CSVData
 
-      return processor(content, exportType, normalizeFileName(fileName, 'csv'))
+      return processor(content, exportType, normalizeFileName(fileName, 'csv', fileNameFormatter))
     }
     case 'xls': {
       assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
       const content = createXLSData(safeData)
 
-      return processor(content, exportType, normalizeFileName(fileName, 'xls'))
+      return processor(content, exportType, normalizeFileName(fileName, 'xls', fileNameFormatter))
     }
     case 'xml': {
       assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
       const content = createXMLData(safeData as any[])
 
-      return processor(content, exportType, normalizeFileName(fileName, 'xml'))
+      return processor(content, exportType, normalizeFileName(fileName, 'xml', fileNameFormatter))
     }
     default:
       throw new Error(MESSAGE_UNKNOWN_EXPORT_TYPE)

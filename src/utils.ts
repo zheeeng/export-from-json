@@ -18,11 +18,12 @@ export function getEntries<T> (data: Record<string, T>) {
   return Object.keys(data).map(key => [key, data[key]] as [string, T])
 }
 
-export function normalizeFileName (fileName: string, extension: string) {
+export function normalizeFileName (fileName: string, extension: string, fileNameFormatter: (name: string) => string) {
   const suffix = '.' + extension
+
   const extensionPattern = new RegExp(`(\\${extension})?$`)
 
-  return fileName.replace(/\s+/, '_').replace(extensionPattern, suffix)
+  return fileNameFormatter(fileName).replace(extensionPattern, suffix)
 }
 
 export function normalizeXMLName (name: string) {

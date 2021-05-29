@@ -4,14 +4,15 @@
 
 Export to plain text, json, csv, xls, xml files from JSON.
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/zheeeng/export-from-json.svg)](https://greenkeeper.io/)
+[![Known Vulnerabilities](https://snyk.io/test/github/zheeeng/export-from-json/badge.svg)](https://snyk.io/test/github/zheeeng/export-from-json)
+[![Maintainability](https://api.codeclimate.com/v1/badges/2fbc35f65ba61bc190e1/maintainability)](https://codeclimate.com/github/zheeeng/export-from-json/maintainability)
 [![language](https://img.shields.io/badge/%3C%2F%3E-TypeScript-blue.svg)](http://typescriptlang.org/)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 [![Build Status](https://travis-ci.org/zheeeng/export-from-json.svg?branch=master)](https://travis-ci.org/zheeeng/export-from-json)
 [![npm version](https://img.shields.io/npm/v/export-from-json.svg)](https://www.npmjs.com/package/export-from-json)
 [![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/export-from-json.svg)](https://unpkg.com/export-from-json/dist/umd/index.min.js)
-
 [![NPM](https://nodei.co/npm/export-from-json.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/export-from-json/)
+
 
 </div>
 

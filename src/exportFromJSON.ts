@@ -13,7 +13,9 @@ export interface IOption<R> {
   processor?: (content: string, type: ExportType, fileName: string) => R,
   withBOM?: boolean,
   delimiter?: string
-  beforeTableEncode?: (tableRow: Array<{ fieldName: string, fieldValues: string[] }>) => Array<{ fieldName: string, fieldValues: string[]}>,
+  beforeTableEncode?: (
+    tableRow: Array<{ fieldName: string, fieldValues: string[] }>,
+  ) => Array<{ fieldName: string, fieldValues: string[]}>,
 }
 
 function exportFromJSON<R = void> ({
@@ -27,7 +29,7 @@ function exportFromJSON<R = void> ({
   processor = downloadFile as any,
   withBOM = false,
   delimiter = ',',
-  beforeTableEncode = (i) => i
+  beforeTableEncode = (i) => i,
 }: IOption<R>): R {
   const MESSAGE_IS_ARRAY_FAIL = 'Invalid export data. Please provide an array of object'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`

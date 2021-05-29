@@ -30,7 +30,7 @@ export function _createFieldsMapper (fields?: string[] | Record<string, string>)
           ),
         )
         .filter(
-          i => getKeys(i).length
+          i => getKeys(i).length,
         )
     }
 
@@ -104,7 +104,11 @@ export function _createTableEntries (
   })))
 }
 
-export function createCSVData (data: any[], delimiter: string = ',', beforeTableEncode: (entries: ITableEntries) => ITableEntries = i => i) {
+export function createCSVData (
+  data: any[],
+  delimiter: string = ',',
+  beforeTableEncode: (entries: ITableEntries) => ITableEntries = i => i,
+) {
   if (!data.length) return ''
 
   const tableMap = _createTableMap(data)
@@ -120,7 +124,10 @@ export function createCSVData (data: any[], delimiter: string = ',', beforeTable
   return head + rows.join('\r\n')
 }
 
-export function _renderTableHTMLText (data: any[], beforeTableEncode: (entries: ITableEntries) => ITableEntries) {
+export function _renderTableHTMLText (
+  data: any[],
+  beforeTableEncode: (entries: ITableEntries) => ITableEntries,
+) {
   assert(data.length > 0)
 
   const tableMap = _createTableMap(data)

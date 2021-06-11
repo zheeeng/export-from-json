@@ -7,7 +7,7 @@ export interface IOption<R> {
   fileName?: string
   extension?: string
   fileNameFormatter?: (name: string) => string
-  fields?: string[] | Record<string, string>
+  fields?: string | string[] | Record<string, string>
   exportType?: ExportType
   replacer?: ((key: string, value: any) => any) | Array<number | string> | null,
   space?: string | number
@@ -35,6 +35,19 @@ function exportFromJSON<R = void> ({
 }: IOption<R>): R {
   const MESSAGE_IS_ARRAY_FAIL = 'Invalid export data. Please provide an array of object'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`
+  const MESSAGE_FIELD_INVALID = `Can't export string data to ${exportType}.`
+
+  if (typeof fields === 'string') {
+    switch (exportType) {
+      case 'txt':
+      case 'css':
+      case 'html': {
+          return processor(fields, exportType, normalizeFileName(fileName, extension ?? exportType, fileNameFormatter))
+        }
+      default:
+        throw new Error(MESSAGE_FIELD_INVALID)
+    }
+  }
 
   const fieldsMapper = _createFieldsMapper(fields)
 
@@ -43,8 +56,10 @@ function exportFromJSON<R = void> ({
   const JSONData = _createJSONData(safeData, replacer, space)
 
   switch (exportType) {
-    case 'txt': {
-      return processor(JSONData, exportType, normalizeFileName(fileName, extension ?? 'txt', fileNameFormatter))
+    case 'txt':
+    case 'css':
+    case 'html': {
+      return processor(JSONData, exportType, normalizeFileName(fileName, extension ?? exportType, fileNameFormatter))
     }
     case 'json': {
       return processor(JSONData, exportType, normalizeFileName(fileName, extension ?? 'json', fileNameFormatter))
@@ -66,7 +81,7 @@ function exportFromJSON<R = void> ({
     case 'xml': {
       const content = createXMLData(safeData)
 
-      return processor(content, exportType, normalizeFileName(fileName, 'xml', fileNameFormatter))
+      return processor(content, exportType, normalizeFileName(fileName, extension ?? 'xml', fileNameFormatter))
     }
     default:
       throw new Error(MESSAGE_UNKNOWN_EXPORT_TYPE)
@@ -76,6 +91,8 @@ function exportFromJSON<R = void> ({
 namespace exportFromJSON {
   export const types: Record<ExportType, ExportType> = {
     txt : 'txt',
+    css : 'css',
+    html : 'html',
     json : 'json',
     csv : 'csv',
     xls : 'xls',

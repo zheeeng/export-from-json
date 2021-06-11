@@ -5,6 +5,12 @@ export function generateDataURI (content: string, type: ExportType): string {
     case 'txt': {
       return 'data:text/plain;charset=utf-8,' + encodeURIComponent(content)
     }
+    case 'css': {
+      return 'data:text/css;charset=utf-8,' + encodeURIComponent(content)
+    }
+    case 'html': {
+      return 'data:text/html;charset=utf-8,' + encodeURIComponent(content)
+    }
     case 'json': {
       return 'data:application/json;charset=utf-8,' + encodeURIComponent(content)
     }

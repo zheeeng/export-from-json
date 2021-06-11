@@ -5,6 +5,7 @@ import ExportType from './ExportType'
 export interface IOption<R> {
   data: object | string
   fileName?: string
+  extension?: string
   fileNameFormatter?: (name: string) => string
   fields?: string[] | Record<string, string>
   exportType?: ExportType
@@ -21,6 +22,7 @@ export interface IOption<R> {
 function exportFromJSON<R = void> ({
   data,
   fileName = 'download',
+  extension,
   fileNameFormatter = name => name.replace(/\s+/, '_'),
   fields,
   exportType = 'txt',
@@ -42,10 +44,10 @@ function exportFromJSON<R = void> ({
 
   switch (exportType) {
     case 'txt': {
-      return processor(JSONData, exportType, normalizeFileName(fileName, 'txt', fileNameFormatter))
+      return processor(JSONData, exportType, normalizeFileName(fileName, extension ?? 'txt', fileNameFormatter))
     }
     case 'json': {
-      return processor(JSONData, exportType, normalizeFileName(fileName, 'json', fileNameFormatter))
+      return processor(JSONData, exportType, normalizeFileName(fileName, extension ?? 'json', fileNameFormatter))
     }
     case 'csv': {
       assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
@@ -53,13 +55,13 @@ function exportFromJSON<R = void> ({
       const CSVData = createCSVData(safeData, delimiter, beforeTableEncode)
       const content = withBOM ? BOM + CSVData : CSVData
 
-      return processor(content, exportType, normalizeFileName(fileName, 'csv', fileNameFormatter))
+      return processor(content, exportType, normalizeFileName(fileName, extension ?? 'csv', fileNameFormatter))
     }
     case 'xls': {
       assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
       const content = createXLSData(safeData, beforeTableEncode)
 
-      return processor(content, exportType, normalizeFileName(fileName, 'xls', fileNameFormatter))
+      return processor(content, exportType, normalizeFileName(fileName, extension ?? 'xls', fileNameFormatter))
     }
     case 'xml': {
       const content = createXMLData(safeData)

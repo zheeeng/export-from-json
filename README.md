@@ -42,7 +42,7 @@ import exportFromJSON from 'export-from-json'
 
 const data = [{ foo: 'foo'}, { bar: 'bar' }]
 const fileName = 'download'
-const exportType = 'csv'
+const exportType =  exportFromJSON.types.csv
 
 exportFromJSON({ data, fileName, exportType })
 ```
@@ -113,6 +113,7 @@ http.createServer(function (request, response){
 | ----------- | -------- | ---- | ----
 | data        | true     | `Array<JSON>` or `JSON` | If the exportType is 'txt' or 'json', data can be any parsable JSON. If the exportType is 'csv' or 'xls', data can only be an array of parsable JSON.
 | fileName    | false    | string | filename without extension, default to `'download'`
+| extension    | false    | string | filename extension, by default it takes the exportType
 | fileNameFormatter    | false    | `(name: string) => string` | filename formatter, by default the file name will be formatted to snake case
 | fields      | false    | `string[]` or field name mapper type `Record<string, string>`  | fields filter, also supports mapper field name by passing an name mapper, e.g. { 'bar': 'baz' }, default to `undefined`
 | exportType  | false    | Enum ExportType | 'txt'(default), 'json', 'csv', 'xls', 'xml'

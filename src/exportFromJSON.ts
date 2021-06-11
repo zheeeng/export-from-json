@@ -7,7 +7,7 @@ export interface IOption<R> {
   fileName?: string
   extension?: string
   fileNameFormatter?: (name: string) => string
-  fields?: string | string[] | Record<string, string>
+  fields?: string[] | Record<string, string>
   exportType?: ExportType
   replacer?: ((key: string, value: any) => any) | Array<number | string> | null,
   space?: string | number
@@ -37,12 +37,12 @@ function exportFromJSON<R = void> ({
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`
   const MESSAGE_FIELD_INVALID = `Can't export string data to ${exportType}.`
 
-  if (typeof fields === 'string') {
+  if (typeof data === 'string') {
     switch (exportType) {
       case 'txt':
       case 'css':
       case 'html': {
-          return processor(fields, exportType, normalizeFileName(fileName, extension ?? exportType, fileNameFormatter))
+          return processor(data, exportType, normalizeFileName(fileName, extension ?? exportType, fileNameFormatter))
         }
       default:
         throw new Error(MESSAGE_FIELD_INVALID)

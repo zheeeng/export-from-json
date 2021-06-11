@@ -2,7 +2,7 @@
 
 <div align="center">
 
-Export to plain text, json, csv, xls, xml files from JSON.
+Export to plain text, css, html, json, csv, xls, xml files from JSON.
 
 [![Known Vulnerabilities](https://snyk.io/test/github/zheeeng/export-from-json/badge.svg)](https://snyk.io/test/github/zheeeng/export-from-json)
 [![Maintainability](https://api.codeclimate.com/v1/badges/2fbc35f65ba61bc190e1/maintainability)](https://codeclimate.com/github/zheeeng/export-from-json/maintainability)
@@ -85,6 +85,12 @@ http.createServer(function (request, response){
                 case 'txt':
                     response.setHeader('Content-Type', 'text/plain')
                     break
+                case 'css':
+                    response.setHeader('Content-Type', 'text/css')
+                    break
+                case 'html':
+                    response.setHeader('Content-Type', 'text/html')
+                    break
                 case 'json':
                     response.setHeader('Content-Type', 'text/plain')
                     break
@@ -111,12 +117,12 @@ http.createServer(function (request, response){
 
 | Option name | Required | Type | Description
 | ----------- | -------- | ---- | ----
-| data        | true     | `Array<JSON>` or `JSON` | If the exportType is 'txt' or 'json', data can be any parsable JSON. If the exportType is 'csv' or 'xls', data can only be an array of parsable JSON.
+| data        | true     | `Array<JSON>`, `JSON` or `string` | If the exportType is 'json', data can be any parsable JSON. If the exportType is 'csv' or 'xls', data can only be an array of parsable JSON.  If the exportType is 'txt', 'css', 'html', the data must be a string type.
 | fileName    | false    | string | filename without extension, default to `'download'`
 | extension    | false    | string | filename extension, by default it takes the exportType
 | fileNameFormatter    | false    | `(name: string) => string` | filename formatter, by default the file name will be formatted to snake case
 | fields      | false    | `string[]` or field name mapper type `Record<string, string>`  | fields filter, also supports mapper field name by passing an name mapper, e.g. { 'bar': 'baz' }, default to `undefined`
-| exportType  | false    | Enum ExportType | 'txt'(default), 'json', 'csv', 'xls', 'xml'
+| exportType  | false    | Enum ExportType | 'txt'(default), 'css', 'html', 'json', 'csv', 'xls', 'xml'
 | processor   | false    | `(content: string, type: ExportType, fileName: string) => any` | default to a front-end downloader
 | withBOM     | false    | boolean | Add BOM(byte order mark) meta to CSV file. BOM is expected by `Excel` when reading UTF8 CSV file. It is default to `false`.
 | delimiter     | false    | string | set the delimiter of `CSV fields`, default to `','`.

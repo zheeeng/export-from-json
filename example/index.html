@@ -78,7 +78,7 @@
     function downloadText (exportType) {
         const fileName = $fileName.value
 
-        exportFromJSON({ data, fileName, fields: $data.innerText, exportType })
+        exportFromJSON({ data: $data.innerText, fileName, exportType })
     }
 
     function show (exportType) {

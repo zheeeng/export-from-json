@@ -2,7 +2,7 @@ import { assert, isArray, normalizeFileName } from './utils'
 import { downloadFile } from './processors'
 import { _prepareData, _createJSONData, createCSVData, createXLSData, createXMLData, _createFieldsMapper } from './converters'
 import ExportType from './ExportType'
-export interface IOption<R> {
+export interface IOption<R = void> {
   data: object | string
   fileName?: string
   extension?: string

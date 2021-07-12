@@ -48,3 +48,11 @@ exports[`createXMLData works correctly 1`] = `
 </base>
 "
 `;
+
+exports[`createXMLData works with empty array 1`] = `
+"<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?><!DOCTYPE base>
+<base>
+
+</base>
+"
+`;

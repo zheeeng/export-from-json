@@ -1,21 +1,55 @@
 import ExportType from './ExportType'
 
-export function generateDataURI (content: string, type: ExportType): string {
+export function generateDataURI (content: string, type: ExportType, byBlob: boolean): string {
   switch (type) {
     case 'txt': {
-      return 'data:text/plain;charset=utf-8,' + encodeURIComponent(content)
+      const blobType = 'text/plain;charset=utf-8'
+
+      if (byBlob) return URL.createObjectURL(new Blob([content], { type: blobType }))
+
+      return `data:,${blobType}` + encodeURIComponent(content)
+    }
+    case 'css': {
+      const blobType = 'text/css;charset=utf-8'
+
+      if (byBlob) return URL.createObjectURL(new Blob([content], { type: blobType }))
+
+      return `data:,${blobType}` + encodeURIComponent(content)
+    }
+    case 'html': {
+      const blobType = 'text/html;charset=utf-8'
+
+      if (byBlob) return URL.createObjectURL(new Blob([content], { type: blobType }))
+
+      return `data:,${blobType}` + encodeURIComponent(content)
     }
     case 'json': {
-      return 'data:application/json;charset=utf-8,' + encodeURIComponent(content)
+      const blobType = 'text/json;charset=utf-8'
+
+      if (byBlob) return URL.createObjectURL(new Blob([content], { type: blobType }))
+
+      return `data:,${blobType}` + encodeURIComponent(content)
     }
     case 'csv': {
-      return 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(content)
+      const blobType = 'text/csv;charset=utf-8'
+
+      if (byBlob) return URL.createObjectURL(new Blob([content], { type: blobType }))
+
+      return `data:,${blobType}` + encodeURIComponent(content)
     }
     case 'xls': {
-      return 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(content)
+      const blobType = 'text/application/vnd.ms-excel;charset=utf-8'
+
+      if (byBlob) return URL.createObjectURL(new Blob([content], { type: blobType }))
+
+      return `data:,${blobType}` + encodeURIComponent(content)
     }
     case 'xml': {
-      return 'data:application/xml;charset=utf-8,' + encodeURIComponent(content)
+      const blobType = 'text/application/xml;charset=utf-8'
+
+      if (byBlob) return URL.createObjectURL(new Blob([content], { type: blobType }))
+
+      return `data:,${blobType}` + encodeURIComponent(content)
     }
     default : {
       return ''
@@ -23,8 +57,8 @@ export function generateDataURI (content: string, type: ExportType): string {
   }
 }
 
-export function downloadFile (content: string, type: ExportType, fileName: string = 'download'): void {
-  const dataURI = generateDataURI(content, type)
+export function downloadFile (content: string, type: ExportType, fileName: string = 'download', byBlob = true): void {
+  const dataURI = generateDataURI(content, type, byBlob)
 
   const anchor = document.createElement('a')
   anchor.href = dataURI
@@ -33,6 +67,12 @@ export function downloadFile (content: string, type: ExportType, fileName: strin
   anchor.setAttribute('style', 'visibility:hidden')
 
   document.body.appendChild(anchor)
-  anchor.click()
+  anchor.dispatchEvent(
+    new MouseEvent('click', {
+      bubbles: false,
+      cancelable: false,
+      view: window,
+    }),
+  )
   document.body.removeChild(anchor)
 }

@@ -6,5 +6,9 @@ it('createCSVData works correctly', () => {
 })
 
 it('createCSVData works correctly', () => {
-  expect(createCSVData(testTableItems, ";")).toMatchSnapshot()
+  expect(createCSVData(testTableItems, ';')).toMatchSnapshot()
+})
+
+it('createCSVData works with empty array', () => {
+  expect(createCSVData([])).toEqual('')
 })

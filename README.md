@@ -2,15 +2,15 @@
 
 <div align="center">
 
-Export to plain text, json, csv, xls, xml files from JSON.
+Export to plain text, css, html, json, csv, xls, xml files from JSON.
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/zheeeng/export-from-json.svg)](https://greenkeeper.io/)
+[![Known Vulnerabilities](https://snyk.io/test/github/zheeeng/export-from-json/badge.svg)](https://snyk.io/test/github/zheeeng/export-from-json)
+[![Maintainability](https://api.codeclimate.com/v1/badges/2fbc35f65ba61bc190e1/maintainability)](https://codeclimate.com/github/zheeeng/export-from-json/maintainability)
 [![language](https://img.shields.io/badge/%3C%2F%3E-TypeScript-blue.svg)](http://typescriptlang.org/)
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/zheeeng/export-from-json/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/zheeeng/export-from-json.svg?branch=master)](https://travis-ci.org/zheeeng/export-from-json)
 [![npm version](https://img.shields.io/npm/v/export-from-json.svg)](https://www.npmjs.com/package/export-from-json)
 [![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/export-from-json.svg)](https://unpkg.com/export-from-json/dist/umd/index.min.js)
-
 [![NPM](https://nodei.co/npm/export-from-json.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/export-from-json/)
 
 </div>
@@ -23,16 +23,15 @@ yarn add export-from-json
 
 or
 
-
 ```sh
 npm i --save export-from-json
 ```
 
 ## Usage
 
-`exportFromJSON` support CommonJS, EcmaScript Module, UMD importing.
+`exportFromJSON` supports CommonJS, EcmaScript Module, UMD importing.
 
-`exportFromJSON` takes options as the [Types Chapter](#types) demonstrated, and it uses a [front-end downloader](https://github.com/zheeeng/export-from-json/blob/master/src/processors.ts) as the default processor option. In browser environment, there is a file content size limitation on the default processor, you can consider using a [server side solution](#in-nodejs-serverr) by passing a custom processor.
+`exportFromJSON` receives the option as the [Types Chapter](#types) demonstrated, and it uses a [front-end downloader](https://github.com/zheeeng/export-from-json/blob/master/src/processors.ts) as the default processor. In browser environment, there is a content size limitation on the default processor, consider using the [server side solution](#in-nodejs-server).
 
 ### In module system
 
@@ -41,7 +40,7 @@ import exportFromJSON from 'export-from-json'
 
 const data = [{ foo: 'foo'}, { bar: 'bar' }]
 const fileName = 'download'
-const exportType = 'csv'
+const exportType =  exportFromJSON.types.csv
 
 exportFromJSON({ data, fileName, exportType })
 ```
@@ -63,7 +62,7 @@ Check the [codepen example](https://codepen.io/zheeeng/pen/PQxBKr)
 
 ### In Node.js server
 
-`exportFromJSON` returns what the `processor` option returns, we can consider such a server side usage for providing converting/downloading service:
+`exportFromJSON` returns what the option `processor` returns, we can use it on server side for providing a converting/downloading service:
 
 ```javascript
 const http = require('http')
@@ -83,6 +82,12 @@ http.createServer(function (request, response){
             switch (type) {
                 case 'txt':
                     response.setHeader('Content-Type', 'text/plain')
+                    break
+                case 'css':
+                    response.setHeader('Content-Type', 'text/css')
+                    break
+                case 'html':
+                    response.setHeader('Content-Type', 'text/html')
                     break
                 case 'json':
                     response.setHeader('Content-Type', 'text/plain')
@@ -106,17 +111,22 @@ http.createServer(function (request, response){
 
 ## Types
 
-**Note:** `JSON` here refers to parsable JSON string or a serializable JavaScript object.
+**Note:** `JSON` refers to a parsable JSON string or a serializable JavaScript object.
 
 | Option name | Required | Type | Description
 | ----------- | -------- | ---- | ----
-| data        | true     | `Array<JSON>` or `JSON` | If the exportType is 'txt' or 'json', data can be any parsable JSON. If the exportType is 'csv' or 'xls', data can only be an array of parsable JSON.
-| fileName    | false    | string | filename without extension, default to 'download'
-| exportType  | false    | Enum ExportType | 'txt'(default), 'json', 'csv', 'xls'`
-| processor   | false    | (content: string, type: ExportType, fileName: string) => any | default to a front-end downloader
-| withBOM     | false    | boolean | Add BOM(byte order mark) meta to CSV file. BOM is expected by `Excel` when reading UTF8 CSV file. It is default to false.
+| data        | true     | `Array<JSON>`, `JSON` or `string` | If the exportType is 'json', data can be any parsable JSON. If the exportType is 'csv' or 'xls', data can only be an array of parsable JSON.  If the exportType is 'txt', 'css', 'html', the data must be a string type.
+| fileName    | false    | string | filename without extension, default to `'download'`
+| extension    | false    | string | filename extension, by default it takes the exportType
+| fileNameFormatter    | false    | `(name: string) => string` | filename formatter, by default the file name will be formatted to snake case
+| fields      | false    | `string[]` or field name mapper type `Record<string, string>`  | fields filter, also supports mapper field name by passing an name mapper, e.g. { 'bar': 'baz' }, default to `undefined`
+| exportType  | false    | Enum ExportType | 'txt'(default), 'css', 'html', 'json', 'csv', 'xls', 'xml'
+| processor   | false    | `(content: string, type: ExportType, fileName: string) => any` | default to a front-end downloader
+| withBOM     | false    | boolean | Add BOM(byte order mark) meta to CSV file. BOM is expected by `Excel` when reading UTF8 CSV file. It is default to `false`.
+| delimiter     | false    | string | set the delimiter of `CSV fields`, default to `','`.
+| beforeTableEncode     | false    | `(entries: { fieldName: string, fieldValues: string[] }[]) => { fieldName: string, fieldValues: string[] }[]` | Given a chance to altering table entries, only works for `CSV` and `XLS` file, by default no altering.
 
-You can also reference these export types through a mounted field `types`:
+You can also reference these exported types through a mounted static field `types`, e.g.
 
 ```js
 exportFromJSON({ data: jsonData, fileName: 'data', exportType: exportFromJSON.types.csv })

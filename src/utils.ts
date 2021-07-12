@@ -2,10 +2,8 @@ export function isArray (data: any): data is any[] {
   return Object.prototype.toString.call(data) === '[object Array]'
 }
 
-export function assertIsArray (data: any, message: string) {
-  if (!isArray(data)) {
-    throw new Error(message)
-  }
+export function assert (condition: any, msg?: string): asserts condition {
+  if (!condition) throw new Error(msg)
 }
 
 export function getValues<T> (data: Record<string, T>) {
@@ -20,11 +18,12 @@ export function getEntries<T> (data: Record<string, T>) {
   return Object.keys(data).map(key => [key, data[key]] as [string, T])
 }
 
-export function normalizeFileName (fileName: string, extension: string) {
+export function normalizeFileName (fileName: string, extension: string, fileNameFormatter: (name: string) => string) {
   const suffix = '.' + extension
+
   const extensionPattern = new RegExp(`(\\${extension})?$`)
 
-  return fileName.replace(/\s+/, '_').replace(extensionPattern, suffix)
+  return fileNameFormatter(fileName).replace(extensionPattern, suffix)
 }
 
 export function normalizeXMLName (name: string) {

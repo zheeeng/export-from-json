@@ -158,10 +158,9 @@ export function createXLSData (data: any[], beforeTableEncode: (entries: ITableE
   if (!data.length) return ''
 
   const content =
-
 `<html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
   </head >
   <body>
     ${_renderTableHTMLText(data, beforeTableEncode)}

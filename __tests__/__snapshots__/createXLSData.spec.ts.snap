@@ -3,7 +3,7 @@
 exports[`createXLSData works correctly 1`] = `
 "<html>
   <head>
-    <meta charset=\\"UTF-8\\">
+    <meta charset=\\"UTF-8\\" />
   </head >
   <body>
     

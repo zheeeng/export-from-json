@@ -1,6 +1,6 @@
 {
   "name": "export-from-json",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Export to txt, json, csv, xls, xml format file from valid JavaScript JSON object.",
   "keywords": [
     "json",
@@ -38,6 +38,14 @@
     "dist",
     "example"
   ],
+  "exports": {
+    ".": {
+      "require": "./dist/umd/index.js",
+      "types": "./dist/types/index.d.ts",
+      "default": "./lib/esm/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "devDependencies": {
     "@types/jest": "^27.0.3",
     "husky": "^7.0.1",

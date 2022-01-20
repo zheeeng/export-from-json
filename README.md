@@ -27,6 +27,12 @@ or
 npm i --save export-from-json
 ```
 
+or
+
+```sh
+pnpm i --save export-from-json
+```
+
 ## Usage
 
 `exportFromJSON` supports CommonJS, EcmaScript Module, UMD importing.

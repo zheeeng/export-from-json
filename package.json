@@ -42,7 +42,7 @@
     ".": {
       "require": "./dist/umd/index.js",
       "types": "./dist/types/index.d.ts",
-      "default": "./lib/esm/index.js"
+      "default": "./dist/esm/index.js"
     },
     "./package.json": "./package.json"
   },

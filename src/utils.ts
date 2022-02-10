@@ -1,8 +1,8 @@
-export function isArray (data: any): data is any[] {
+export function isArray (data: unknown): data is unknown[] {
   return Object.prototype.toString.call(data) === '[object Array]'
 }
 
-export function assert (condition: any, msg?: string): asserts condition {
+export function assert (condition: unknown, msg?: string): asserts condition {
   if (!condition) throw new Error(msg)
 }
 

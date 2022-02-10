@@ -1,7 +1,7 @@
 import { assert, isArray, normalizeFileName } from './utils'
 import { downloadFile } from './processors'
 import { _prepareData, _createJSONData, createCSVData, createXLSData, createXMLData, _createFieldsMapper } from './converters'
-import ExportType from './ExportType'
+import { exportTypes, ExportType } from './types'
 export interface IOption<R = void> {
   data: object | string
   fileName?: string
@@ -88,17 +88,8 @@ function exportFromJSON<R = void> ({
   }
 }
 
-namespace exportFromJSON {
-  export const types: Record<ExportType, ExportType> = {
-    txt : 'txt',
-    css : 'css',
-    html : 'html',
-    json : 'json',
-    csv : 'csv',
-    xls : 'xls',
-    xml : 'xml',
-  }
-  export const processors = { downloadFile }
-}
+exportFromJSON.types = exportTypes
+
+exportFromJSON.processors = { downloadFile }
 
 export default exportFromJSON

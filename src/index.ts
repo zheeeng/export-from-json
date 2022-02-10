@@ -1,5 +1,5 @@
 import exportFromJSON from './exportFromJSON'
-import ExportType from './ExportType'
+import type { ExportType } from './types'
 
-export { ExportType }
+export type { ExportType }
 export default exportFromJSON

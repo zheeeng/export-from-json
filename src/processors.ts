@@ -1,4 +1,4 @@
-import ExportType from './ExportType'
+import type { ExportType } from './types'
 
 export function generateDataURI (content: string, type: ExportType, byBlob: boolean): string {
   switch (type) {

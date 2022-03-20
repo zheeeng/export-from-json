@@ -4,11 +4,11 @@ import { _createTableMap } from '../src/converters'
 describe('_createTableMap', () => {
   const tableMap = _createTableMap(testTableItems)
 
-  it('works as expected', () => {
+  test('works as expected', () => {
     expect(tableMap).toEqual(expectedTableMap)
   })
 
-  it('works correctly', () => {
+  test('works correctly', () => {
     expect(tableMap).toMatchSnapshot()
   })
 })

@@ -3,11 +3,11 @@ import { _createJSONData } from '../src/converters'
 
 describe('_createJSONData', () => {
 
-  it('convert plain object as the JSON.stringify does', () => {
+  test('convert plain object as the JSON.stringify does', () => {
     expect(_createJSONData(testTableItems, null, 0)).toMatchSnapshot()
   })
 
-  it('handle toJSON correctly', () => {
+  test('handle toJSON correctly', () => {
     const toJSON1 = {
       foo: 42,
       toJSON: () => ({ foo: 24 }),

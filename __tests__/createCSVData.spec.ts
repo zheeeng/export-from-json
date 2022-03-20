@@ -1,14 +1,14 @@
 import { testTableItems } from './shared/data'
 import { createCSVData } from '../src/converters'
 
-it('createCSVData works correctly', () => {
+test('createCSVData works correctly', () => {
   expect(createCSVData(testTableItems)).toMatchSnapshot()
 })
 
-it('createCSVData works correctly', () => {
+test('createCSVData works correctly', () => {
   expect(createCSVData(testTableItems, ';')).toMatchSnapshot()
 })
 
-it('createCSVData works with empty array', () => {
+test('createCSVData works with empty array', () => {
   expect(createCSVData([])).toEqual('')
 })

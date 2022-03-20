@@ -9,7 +9,7 @@ import { _createFieldsMapper } from '../src/converters'
 
 describe('_createFieldsMapper', () => {
 
-  it('mapper return the original items', () => {
+  test('mapper return the original items', () => {
     const fieldsMapper = _createFieldsMapper()
 
     const cloned = JSON.parse(JSON.stringify(testTableItems))
@@ -18,25 +18,25 @@ describe('_createFieldsMapper', () => {
     expect(fieldsMapper(testTableItems)).toBe(testTableItems)
   })
 
-  it('mapper omit fields correctly 1', () => {
+  test('mapper omit fields correctly 1', () => {
     const fieldsMapper = _createFieldsMapper(fields1)
 
     expect(fieldsMapper(testTableItems)).toEqual(testTableItemsWithFields1)
   })
 
-  it('mapper omit fields correctly 2', () => {
+  test('mapper omit fields correctly 2', () => {
     const fieldsMapper = _createFieldsMapper(fieldsMapperObj1)
 
     expect(fieldsMapper(testTableItems)).toEqual(testTableItemsWithFieldsMapperObj1)
   })
 
-  it('mapper omit fields correctly 3', () => {
+  test('mapper omit fields correctly 3', () => {
     const fieldsMapper = _createFieldsMapper(fields2)
 
     expect(fieldsMapper(testTableItems)).toEqual(testTableItemsWithFields2)
   })
 
-  it('mapper omit fields correctly 4', () => {
+  test('mapper omit fields correctly 4', () => {
     const fieldsMapper = _createFieldsMapper(fieldsMapperObj2)
 
     expect(fieldsMapper(testTableItems)).toEqual(testTableItemsWithFieldsMapperObj2)

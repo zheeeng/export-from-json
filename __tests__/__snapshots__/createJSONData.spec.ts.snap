@@ -1,7 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`_createJSONData convert plain object as the JSON.stringify does 1`] = `"[{\\"greeting\\":\\"hello\\"},{\\"foo\\":\\"foo\\",\\"bar\\":\\"bar\\"},{\\"a\\":100,\\"b\\":[1,2,3],\\"c\\":{\\"x\\":200,\\"y\\":300},\\"d\\":\\"D\\",\\"e\\":null}]"`;
-
 exports[`_createJSONData convert the plain object as the JSON.stringify does 1`] = `"[{\\"greeting\\":\\"hello\\"},{\\"foo\\":\\"foo\\",\\"bar\\":\\"bar\\"},{\\"a\\":100,\\"b\\":[1,2,3],\\"c\\":{\\"x\\":200,\\"y\\":300},\\"d\\":\\"D\\",\\"e\\":null}]"`;
-
-exports[`_createJSONData converting plain object as the JSON.stringify does 1`] = `"[{\\"greeting\\":\\"hello\\"},{\\"foo\\":\\"foo\\",\\"bar\\":\\"bar\\"},{\\"a\\":100,\\"b\\":[1,2,3],\\"c\\":{\\"x\\":200,\\"y\\":300},\\"d\\":\\"D\\",\\"e\\":null}]"`;

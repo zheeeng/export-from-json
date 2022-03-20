@@ -7,8 +7,8 @@ Export to plain text, css, html, json, csv, xls, xml files from JSON.
 [![Known Vulnerabilities](https://snyk.io/test/github/zheeeng/export-from-json/badge.svg)](https://snyk.io/test/github/zheeeng/export-from-json)
 [![Maintainability](https://api.codeclimate.com/v1/badges/2fbc35f65ba61bc190e1/maintainability)](https://codeclimate.com/github/zheeeng/export-from-json/maintainability)
 [![language](https://img.shields.io/badge/%3C%2F%3E-TypeScript-blue.svg)](http://typescriptlang.org/)
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/zheeeng/export-from-json/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/zheeeng/export-from-json.svg?branch=master)](https://travis-ci.org/zheeeng/export-from-json)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/zheeeng/export-from-json/blob/main/LICENSE)
+[![Build Status](https://travis-ci.org/zheeeng/export-from-json.svg?branch=main)](https://travis-ci.org/zheeeng/export-from-json)
 [![npm version](https://img.shields.io/npm/v/export-from-json.svg)](https://www.npmjs.com/package/export-from-json)
 [![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/export-from-json.svg)](https://unpkg.com/export-from-json/dist/umd/index.min.js)
 [![NPM](https://nodei.co/npm/export-from-json.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/export-from-json/)
@@ -37,7 +37,7 @@ pnpm i --save export-from-json
 
 `exportFromJSON` supports CommonJS, EcmaScript Module, UMD importing.
 
-`exportFromJSON` receives the option as the [Types Chapter](#types) demonstrated, and it uses a [front-end downloader](https://github.com/zheeeng/export-from-json/blob/master/src/processors.ts) as the default processor. In browser environment, there is a content size limitation on the default processor, consider using the [server side solution](#in-nodejs-server).
+`exportFromJSON` receives the option as the [Types Chapter](#types) demonstrated, and it uses a [front-end downloader](https://github.com/zheeeng/export-from-json/blob/main/src/processors.ts) as the default processor. In browser environment, there is a content size limitation on the default processor, consider using the [server side solution](#in-nodejs-server).
 
 ### In module system
 

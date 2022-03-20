@@ -7,7 +7,14 @@ exports[`createCSVData works correctly 1`] = `
 \\"\\",\\"\\",\\"\\",\\"100\\",\\"[1,2,3]\\",\\"{\\"\\"x\\"\\":200,\\"\\"y\\"\\":300}\\",\\"D\\",\\"null\\",\\"\\""
 `;
 
-exports[`createCSVData works correctly 2`] = `
+exports[`createCSVData works correctly with specifying beforeTableEncode option 1`] = `
+"greeting;foo;bar;a;b;c;d;e;f
+\\"hello\\";\\"0\\";\\"0\\";\\"0\\";\\"0\\";\\"0\\";\\"0\\";\\"0\\";\\"0\\"
+\\"0\\";\\"foo\\";\\"bar\\";\\"0\\";\\"0\\";\\"0\\";\\"0\\";\\"0\\";\\"0\\"
+\\"0\\";\\"0\\";\\"0\\";\\"1000\\";\\"[1,2,3]\\";\\"{\\"\\"x\\"\\":200,\\"\\"y\\"\\":300}\\";\\"D\\";\\"null\\";\\"0\\""
+`;
+
+exports[`createCSVData works correctly with specifying delimiter option 1`] = `
 "greeting;foo;bar;a;b;c;d;e;f
 \\"hello\\";\\"\\";\\"\\";\\"\\";\\"\\";\\"\\";\\"\\";\\"\\";\\"\\"
 \\"\\";\\"foo\\";\\"bar\\";\\"\\";\\"\\";\\"\\";\\"\\";\\"\\";\\"\\"

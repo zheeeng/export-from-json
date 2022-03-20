@@ -1,3 +1,5 @@
+import type { ITableEntries } from '../../src/converters'
+
 export const testTableItems = [
   { greeting: 'hello' },
   { foo: 'foo', bar: 'bar' },
@@ -114,3 +116,11 @@ export const testTableItemsWithFieldsMapperObj2 = [
   { greet: 'hello' }, { 'baz': 'bar' }, { 'ddd': 'D' },
 ]
 
+// multiply numeric field values
+export const beforeTableEncode = (rows: ITableEntries) => rows.map(row => ({
+  fieldName: row.fieldName,
+  fieldValues: row.fieldValues.map(value => isNaN(+value) ? value : (+value * 10).toString()),
+}))
+
+// sort field names alphabetically
+export const beforeTableEncode2 = (rows: ITableEntries) => rows.sort((p, c) => p.fieldName.localeCompare(c.fieldName))

@@ -1,10 +1,12 @@
 import { testTableItems } from './shared/data'
 import { createXLSData } from '../src/converters'
 
-test('createXLSData works correctly', () => {
-  expect(createXLSData(testTableItems)).toMatchSnapshot()
-})
+describe('createXLSData', () => {
+  it('works correctly', () => {
+    expect(createXLSData(testTableItems)).toMatchSnapshot()
+  })
 
-test('createXLSData works with empty array', () => {
-  expect(createXLSData([])).toEqual('')
+  it('works with empty array', () => {
+    expect(createXLSData([])).toEqual('')
+  })
 })

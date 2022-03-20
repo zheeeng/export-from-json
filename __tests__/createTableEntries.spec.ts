@@ -1,17 +1,17 @@
-import { testTableMap, resultOfTestTableMap, sortedOfTestTableMap } from './shared/data'
+import { testTableMap, resultOfTestTableMap, sortedOfTestTableMap, beforeTableEncode2 } from './shared/data'
 import { _createTableEntries } from '../src/converters'
 
 describe('_createTableEntries', () => {
 
-  test('create field entries correctly', () => {
+  it('creates field entries correctly', () => {
     expect(
       _createTableEntries(testTableMap)
     ).toEqual(resultOfTestTableMap)
   })
 
-  test('sort field entries correctly', () => {
+  it('sorts field entries correctly with the beforeTableEncode option customized', () => {
     expect(
-      _createTableEntries(testTableMap, entries => entries.sort((p, c) => p.fieldName.localeCompare(c.fieldName)))
+      _createTableEntries(testTableMap, beforeTableEncode2)
     ).toEqual(sortedOfTestTableMap)
   })
 })

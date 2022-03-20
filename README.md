@@ -132,8 +132,21 @@ http.createServer(function (request, response){
 | delimiter     | false    | string | set the delimiter of `CSV fields`, default to `','`.
 | beforeTableEncode     | false    | `(entries: { fieldName: string, fieldValues: string[] }[]) => { fieldName: string, fieldValues: string[] }[]` | Given a chance to altering table entries, only works for `CSV` and `XLS` file, by default no altering.
 
-You can also reference these exported types through a mounted static field `types`, e.g.
+### Tips
+
+* You can reference these exported types through a mounted static field `types`, e.g.
 
 ```js
 exportFromJSON({ data: jsonData, fileName: 'data', exportType: exportFromJSON.types.csv })
+```
+
+* You can transform the data before exporting by `beforeTableEncode`, e.g.
+
+```js
+exportFromJSON({
+    data: jsonData,
+    fileName: 'data',
+    exportType: exportFromJSON.types.csv,
+    beforeTableEncode: rows => rows.sort((p, c) => p.fieldName.localeCompare(c.fieldName)),
+})
 ```

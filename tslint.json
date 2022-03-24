@@ -131,7 +131,6 @@
 		"use-default-type-parameter": true,
 		"use-isnan": true,
 		"cyclomatic-complexity": true,
-		"deprecation": true,
 		"eofline": true,
 		"indent": [
 			true,

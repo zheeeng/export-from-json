@@ -9,14 +9,19 @@ export interface IOption<R = void> {
   fileNameFormatter?: (name: string) => string
   fields?: string[] | Record<string, string>
   exportType?: ExportType
-  replacer?: ((key: string, value: any) => any) | Array<number | string> | null,
+  replacer?: ((key: string, value: any) => any) | Array<number | string> | null
   space?: string | number
-  processor?: (content: string, type: ExportType, fileName: string) => R,
-  withBOM?: boolean,
+  processor?: (content: string, type: ExportType, fileName: string) => R
+  withBOM?: boolean
+  /**
+   * @deprecated `csvDelimiter` instead
+   */
   delimiter?: string
+  csvDelimiter?: string
+  csvEncloser?: '"' | ''
   beforeTableEncode?: (
     tableRow: Array<{ fieldName: string, fieldValues: string[] }>,
-  ) => Array<{ fieldName: string, fieldValues: string[]}>,
+  ) => Array<{ fieldName: string, fieldValues: string[]}>
 }
 
 function exportFromJSON<R = void> ({
@@ -30,7 +35,9 @@ function exportFromJSON<R = void> ({
   space = 4,
   processor = downloadFile as any,
   withBOM = false,
-  delimiter = ',',
+  delimiter,
+  csvDelimiter = delimiter ?? ',',
+  csvEncloser = '"',
   beforeTableEncode = (i) => i,
 }: IOption<R>): R {
   const MESSAGE_IS_ARRAY_FAIL = 'Invalid export data. Please provide an array of objects'
@@ -67,7 +74,7 @@ function exportFromJSON<R = void> ({
     case 'csv': {
       assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
       const BOM = '\ufeff'
-      const CSVData = createCSVData(safeData, delimiter, beforeTableEncode)
+      const CSVData = createCSVData(safeData, { delimiter: csvDelimiter, beforeTableEncode, encloser: csvEncloser })
       const content = withBOM ? BOM + CSVData : CSVData
 
       return processor(content, exportType, normalizeFileName(fileName, extension ?? 'csv', fileNameFormatter))

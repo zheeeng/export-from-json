@@ -6,6 +6,12 @@ export const testTableItems = [
   { a: 100, b: [ 1, 2, 3 ], c: { x: 200, y: 300 }, d: 'D', e: null, f: undefined },
 ]
 
+export const testTableItems2 = [
+  { greeting: 'hel"lo' },
+  { foo: 'foo', bar: 'b"a"r' },
+  { a: 100, b: [ 1, 2, 3 ], c: { x: 200, y: 300 }, d: 'D', e: null, f: undefined },
+]
+
 export const testTableMap = {
   greeting: ['hello', '', ''],
   foo: ['', 'foo', ''],

@@ -48,6 +48,14 @@
     Use fields "Name", "Author", "subject":
     <input id="useFields" type="checkbox" />
 </label>
+<br>
+<label>
+    Change CSV encloser to:
+    <select id="useCSVEncloser">
+        <option value='"'>double-quotes</option>
+        <option value="">empty</option>
+    </select>
+</label>
 <h1>Output:</h1>
 <pre id="content" style="padding: 8px; border: whitesmoke double 4px; background-color: lightgray; "></pre>
 
@@ -58,6 +66,7 @@
     const $fileName = document.getElementById('fileName')
     const $content = document.getElementById('content')
     const $useFields = document.getElementById('useFields')
+    const $useCSVEncloser = document.getElementById('useCSVEncloser')
 
     document.body.addEventListener('click', (e) => {
         if (e.target === $data) {
@@ -71,8 +80,9 @@
         const fileName = $fileName.value
         const data = JSON.parse($data.innerText)
         const fields = $useFields.value ? ['Name', 'Author', 'Subject'] : []
+        const csvEncloser = $useCSVEncloser.value
 
-        exportFromJSON({ data, fileName, fields, exportType })
+        exportFromJSON({ data, fileName, fields, exportType, csvEncloser })
     }
 
     function downloadText (exportType) {
@@ -85,8 +95,9 @@
         const fileName = $fileName.value
         const data = JSON.parse($data.innerText)
         const fields = $useFields.value ? ['Name', 'Author', 'Subject'] : []
+        const csvEncloser = $useCSVEncloser.value
 
-        const output = exportFromJSON({ data, fileName, fields, exportType, processor: content => content })
+        const output = exportFromJSON({ data, fileName, fields, exportType, csvEncloser, processor: content => content })
         $content.innerText = output
     }
 </script>

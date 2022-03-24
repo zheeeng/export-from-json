@@ -106,8 +106,11 @@ export function _createTableEntries (
 
 export function createCSVData (
   data: any[],
-  delimiter: string = ',',
-  beforeTableEncode: (entries: ITableEntries) => ITableEntries = i => i,
+  { delimiter = ',', encloser = '"', beforeTableEncode = i => i }: {
+    delimiter?: string,
+    encloser?: string,
+    beforeTableEncode?: (entries: ITableEntries) => ITableEntries,
+  },
 ) {
   if (!data.length) return ''
 
@@ -116,7 +119,7 @@ export function createCSVData (
   const head = tableEntries.map(({ fieldName }) => fieldName)
     .join(delimiter) + '\r\n'
   const columns = tableEntries.map(({ fieldValues }) => fieldValues)
-    .map(column => column.map(value => `"${value.replace(/\"/g, '""')}"`))
+    .map(column => column.map(value => `${encloser}${value.replace(/\"/g, '""')}${encloser}`))
   const rows = columns.reduce(
     (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value}${delimiter}${column[rowIndex]}`),
   )

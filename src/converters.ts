@@ -104,24 +104,35 @@ export function _createTableEntries (
   })))
 }
 
+// Rule: Fields that contain commas must begin and end with double quotes.
+// Addition Rule: Fields that contain double quotes must begin and end with double quotes.
+// Rule: Fields that contain line breaks must begin and end with double quotes (not all programs support values with line breaks).
+// Rule: All other fields do not require double quotes.
+// Rule: Double quotes within values are represented by two contiguous double quotes.
+function encloser (value: string) {
+  const enclosingCharacter = /,|"|\n/.test(value) ? '"' : ''
+  const escaped = value.replace(/"/g, '""')
+
+  return `${enclosingCharacter}${escaped}${enclosingCharacter}`
+}
+
+// Reference: https://techterms.com/definition/csv
 export function createCSVData (
   data: any[],
-  { delimiter = ',', encloser = '"', beforeTableEncode = i => i }: {
-    delimiter?: string,
-    encloser?: string,
-    beforeTableEncode?: (entries: ITableEntries) => ITableEntries,
-  },
+  beforeTableEncode: (entries: ITableEntries) => ITableEntries = i => i,
 ) {
   if (!data.length) return ''
 
   const tableMap = _createTableMap(data)
   const tableEntries = _createTableEntries(tableMap, beforeTableEncode)
-  const head = tableEntries.map(({ fieldName }) => fieldName)
-    .join(delimiter) + '\r\n'
+
+  // Rule: Columns (fields) are separated by commas.
+  // Rule: Rows are separated by line breaks (newline characters).
+  const head = tableEntries.map(({ fieldName }) => fieldName).join(',') + '\r\n'
   const columns = tableEntries.map(({ fieldValues }) => fieldValues)
-    .map(column => column.map(value => `${encloser}${value.replace(/\"/g, '""')}${encloser}`))
+    .map(column => column.map(encloser))
   const rows = columns.reduce(
-    (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value}${delimiter}${column[rowIndex]}`),
+    (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value},${column[rowIndex]}`),
   )
 
   return head + rows.join('\r\n')

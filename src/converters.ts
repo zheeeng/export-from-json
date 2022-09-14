@@ -1,4 +1,4 @@
-import { isArray, getEntries, normalizeXMLName, indent, stripHTML, assert, getKeys } from './utils'
+import { isArray, getEntries, normalizeXMLName, indent, stripHTML, assert, getKeys } from './utils.js'
 
 export function _createFieldsMapper (fields?: string[] | Record<string, string>) {
   if (
@@ -106,7 +106,8 @@ export function _createTableEntries (
 
 // Rule: Fields that contain commas must begin and end with double quotes.
 // Addition Rule: Fields that contain double quotes must begin and end with double quotes.
-// Rule: Fields that contain line breaks must begin and end with double quotes (not all programs support values with line breaks).
+// Rule: Fields that contain line breaks must begin and end with double quotes
+//       (not all programs support values with line breaks).
 // Rule: All other fields do not require double quotes.
 // Rule: Double quotes within values are represented by two contiguous double quotes.
 function encloser (value: string) {

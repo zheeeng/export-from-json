@@ -1,7 +1,7 @@
-import { assert, isArray, normalizeFileName } from './utils'
-import { downloadFile } from './processors'
-import { _prepareData, _createJSONData, createCSVData, createXLSData, createXMLData, _createFieldsMapper } from './converters'
-import { exportTypes, ExportType } from './types'
+import { assert, isArray, normalizeFileName } from './utils.js'
+import { downloadFile } from './processors.js'
+import { _prepareData, _createJSONData, createCSVData, createXLSData, createXMLData, _createFieldsMapper } from './converters.js'
+import { exportTypes, ExportType } from './types.js'
 export interface IOption<R = void> {
   data: object | string
   fileName?: string

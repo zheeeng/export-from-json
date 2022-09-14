@@ -10,6 +10,7 @@
     "excel",
     "typescript"
   ],
+  "type": "module",
   "main": "dist/umd/index.js",
   "module": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -59,8 +60,17 @@
     "typescript": "^4.6.2"
   },
   "jest": {
+    "extensionsToTreatAsEsm": [".ts"],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
     "transform": {
-      "^.+\\.ts$": "ts-jest"
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "useESM": true
+        }
+      ]
     },
     "testRegex": "/__tests__/.+\\.spec.ts$",
     "moduleFileExtensions": [

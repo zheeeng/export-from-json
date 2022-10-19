@@ -37,7 +37,7 @@ pnpm i --save export-from-json
 
 `exportFromJSON` supports CommonJS, EcmaScript Module, UMD importing.
 
-`exportFromJSON` receives the option as the [Types Chapter](#types) demonstrated, and it uses a [front-end downloader](https://github.com/zheeeng/export-from-json/blob/main/src/processors.ts) as the default processor. In browser environment, there is a content size limitation on the default processor, consider using the [server side solution](#in-nodejs-server).
+`exportFromJSON` receives the option as the [Types Chapter](#types) demonstrated, and it uses a [front-end downloader](https://github.com/zheeeng/export-from-json/blob/main/src/processors.ts) as the default processor. In browser environment, there is a **content size limitation** on the default processor, consider using the [server side solution](#in-nodejs-server).
 
 ### In module system
 

@@ -16,7 +16,7 @@ export interface IOption<R = void> {
   beforeTableEncode?: (
     tableRow: Array<{ fieldName: string, fieldValues: string[] }>,
   ) => Array<{ fieldName: string, fieldValues: string[]}>
-  delimiter?: string
+  delimiter?: ',' | ';'
 }
 
 function exportFromJSON<R = void> ({
@@ -28,7 +28,7 @@ function exportFromJSON<R = void> ({
   exportType = 'txt',
   replacer = null,
   space = 4,
-  processor = downloadFile as any,
+  processor = downloadFile as never,
   withBOM = false,
   beforeTableEncode = (i) => i,
   delimiter,
@@ -67,14 +67,14 @@ function exportFromJSON<R = void> ({
     case 'csv': {
       assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
       const BOM = '\ufeff'
-      const CSVData = createCSVData(safeData, beforeTableEncode, delimiter)
+      const CSVData = createCSVData(safeData, { beforeTableEncode, delimiter })
       const content = withBOM ? BOM + CSVData : CSVData
 
       return processor(content, exportType, normalizeFileName(fileName, extension ?? 'csv', fileNameFormatter))
     }
     case 'xls': {
       assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
-      const content = createXLSData(safeData, beforeTableEncode)
+      const content = createXLSData(safeData, { beforeTableEncode })
 
       return processor(content, exportType, normalizeFileName(fileName, extension ?? 'xls', fileNameFormatter))
     }

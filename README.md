@@ -130,6 +130,7 @@ http.createServer(function (request, response){
 | processor   | false    | `(content: string, type: ExportType, fileName: string) => any` | default to a front-end downloader
 | withBOM     | false    | boolean | Add BOM(byte order mark) meta to CSV file. BOM is expected by `Excel` when reading UTF8 CSV file. It is default to `false`.
 | beforeTableEncode     | false    | `(entries: { fieldName: string, fieldValues: string[] }[]) => { fieldName: string, fieldValues: string[] }[]` | Given a chance to altering table entries, only works for `CSV` and `XLS` file, by default no altering.
+| delimiter   | false    | `',' | ';'` | Specify CSV raw data's delimiter between values.
 
 ### Tips
 

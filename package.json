@@ -1,6 +1,6 @@
 {
   "name": "export-from-json",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Export to txt, json, csv, xls, xml format file from valid JavaScript JSON object.",
   "keywords": [
     "json",
@@ -60,7 +60,9 @@
     "typescript": "^4.6.2"
   },
   "jest": {
-    "extensionsToTreatAsEsm": [".ts"],
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1"
     },

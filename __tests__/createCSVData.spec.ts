@@ -7,7 +7,10 @@ test('createCSVData works correctly', () => {
 })
 
 test('createCSVData works correctly with specifying beforeTableEncode option', () => {
-  expect(createCSVData(testTableItems, beforeTableEncode)).toMatchSnapshot()
+  expect(createCSVData(testTableItems, { beforeTableEncode })).toMatchSnapshot()
+})
+test('createCSVData works correctly with delimiter option', () => {
+  expect(createCSVData(testTableItems, { delimiter: ';' })).toMatchSnapshot()
 })
 
 test('createCSVData works with empty array', () => {

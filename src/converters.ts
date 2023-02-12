@@ -117,12 +117,20 @@ function encloser (value: string) {
   return `${enclosingCharacter}${escaped}${enclosingCharacter}`
 }
 
+type CreateCSVDataOptions = {
+  beforeTableEncode?: (entries: ITableEntries) => ITableEntries,
+  delimiter?: ',' | ';',
+}
+
+const defaultCreateCSVDataOption: Required<CreateCSVDataOptions> = { beforeTableEncode: i => i, delimiter: ',' }
+
 // Reference: https://techterms.com/definition/csv
 export function createCSVData (
   data: any[],
-  beforeTableEncode: (entries: ITableEntries) => ITableEntries = i => i,
-  delimiter = "'",
+  options: CreateCSVDataOptions = {}
 ) {
+  const { beforeTableEncode, delimiter } = { ...defaultCreateCSVDataOption, ...options }
+
   if (!data.length) return ''
 
   const tableMap = _createTableMap(data)
@@ -170,7 +178,15 @@ export function _renderTableHTMLText (
   `
 }
 
-export function createXLSData (data: any[], beforeTableEncode: (entries: ITableEntries) => ITableEntries = i => i) {
+type CreateXLSDataOptions = {
+  beforeTableEncode?: (entries: ITableEntries) => ITableEntries,
+}
+
+const defaultCreateXLSDataOptions: Required<CreateXLSDataOptions> = { beforeTableEncode: i => i }
+
+export function createXLSData (data: any[], options?: CreateXLSDataOptions) {
+  const { beforeTableEncode } = { ...defaultCreateXLSDataOptions, ...options }
+
   if (!data.length) return ''
 
   const content =

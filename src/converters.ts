@@ -121,6 +121,7 @@ function encloser (value: string) {
 export function createCSVData (
   data: any[],
   beforeTableEncode: (entries: ITableEntries) => ITableEntries = i => i,
+  delimiter = "'",
 ) {
   if (!data.length) return ''
 
@@ -129,11 +130,11 @@ export function createCSVData (
 
   // Rule: Columns (fields) are separated by commas.
   // Rule: Rows are separated by line breaks (newline characters).
-  const head = tableEntries.map(({ fieldName }) => fieldName).join(',') + '\r\n'
+  const head = tableEntries.map(({ fieldName }) => fieldName).join(delimiter) + '\r\n'
   const columns = tableEntries.map(({ fieldValues }) => fieldValues)
     .map(column => column.map(encloser))
   const rows = columns.reduce(
-    (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value},${column[rowIndex]}`),
+    (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value}${delimiter}${column[rowIndex]}`),
   )
 
   return head + rows.join('\r\n')

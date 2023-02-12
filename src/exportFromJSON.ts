@@ -16,6 +16,7 @@ export interface IOption<R = void> {
   beforeTableEncode?: (
     tableRow: Array<{ fieldName: string, fieldValues: string[] }>,
   ) => Array<{ fieldName: string, fieldValues: string[]}>
+  delimiter?: string
 }
 
 function exportFromJSON<R = void> ({
@@ -30,6 +31,7 @@ function exportFromJSON<R = void> ({
   processor = downloadFile as any,
   withBOM = false,
   beforeTableEncode = (i) => i,
+  delimiter,
 }: IOption<R>): R {
   const MESSAGE_IS_ARRAY_FAIL = 'Invalid export data. Please provide an array of objects'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`
@@ -65,7 +67,7 @@ function exportFromJSON<R = void> ({
     case 'csv': {
       assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
       const BOM = '\ufeff'
-      const CSVData = createCSVData(safeData, beforeTableEncode)
+      const CSVData = createCSVData(safeData, beforeTableEncode, delimiter)
       const content = withBOM ? BOM + CSVData : CSVData
 
       return processor(content, exportType, normalizeFileName(fileName, extension ?? 'csv', fileNameFormatter))

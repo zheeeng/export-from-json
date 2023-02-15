@@ -31,7 +31,7 @@ function exportFromJSON<R = void> ({
   processor = downloadFile as never,
   withBOM = false,
   beforeTableEncode = (i) => i,
-  delimiter,
+  delimiter = ',',
 }: IOption<R>): R {
   const MESSAGE_IS_ARRAY_FAIL = 'Invalid export data. Please provide an array of objects'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`

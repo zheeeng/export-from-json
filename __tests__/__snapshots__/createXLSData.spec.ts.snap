@@ -3,7 +3,7 @@
 exports[`createXLSData works correctly 1`] = `
 "<html>
   <head>
-    <meta charset=\\"UTF-8\\" />
+    <meta charset="UTF-8" />
   </head >
   <body>
     
@@ -14,7 +14,7 @@ exports[`createXLSData works correctly 1`] = `
       <tbody>
         <tr><td>hello</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
         <tr><td></td><td>foo</td><td>bar</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        <tr><td></td><td></td><td></td><td>100</td><td>[1,2,3]</td><td>{\\"x\\":200,\\"y\\":300}</td><td>D</td><td>null</td><td></td></tr>
+        <tr><td></td><td></td><td></td><td>100</td><td>[1,2,3]</td><td>{"x":200,"y":300}</td><td>D</td><td>null</td><td></td></tr>
       </tbody>
     </table>
   

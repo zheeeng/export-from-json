@@ -117,7 +117,7 @@ function encloser (value: string) {
   return `${enclosingCharacter}${escaped}${enclosingCharacter}`
 }
 
-type CreateCSVDataOptions = {
+interface CreateCSVDataOptions {
   beforeTableEncode?: (entries: ITableEntries) => ITableEntries,
   delimiter?: ',' | ';',
 }
@@ -127,7 +127,7 @@ const defaultCreateCSVDataOption: Required<CreateCSVDataOptions> = { beforeTable
 // Reference: https://techterms.com/definition/csv
 export function createCSVData (
   data: any[],
-  options: CreateCSVDataOptions = {}
+  options: CreateCSVDataOptions = {},
 ) {
   const { beforeTableEncode, delimiter } = { ...defaultCreateCSVDataOption, ...options }
 
@@ -178,7 +178,7 @@ export function _renderTableHTMLText (
   `
 }
 
-type CreateXLSDataOptions = {
+interface CreateXLSDataOptions {
   beforeTableEncode?: (entries: ITableEntries) => ITableEntries,
 }
 

@@ -1,48 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`_createTableMap works correctly 1`] = `
-Object {
-  "a": Array [
+{
+  "a": [
     "",
     "",
     "100",
   ],
-  "b": Array [
+  "b": [
     "",
     "",
     "[1,2,3]",
   ],
-  "bar": Array [
+  "bar": [
     "",
     "bar",
     "",
   ],
-  "c": Array [
+  "c": [
     "",
     "",
-    "{\\"x\\":200,\\"y\\":300}",
+    "{"x":200,"y":300}",
   ],
-  "d": Array [
+  "d": [
     "",
     "",
     "D",
   ],
-  "e": Array [
+  "e": [
     "",
     "",
     "null",
   ],
-  "f": Array [
+  "f": [
     "",
     "",
     "",
   ],
-  "foo": Array [
+  "foo": [
     "",
     "foo",
     "",
   ],
-  "greeting": Array [
+  "greeting": [
     "hello",
     "",
     "",

@@ -21,8 +21,8 @@ devDependencies:
     specifier: ^3.26.3
     version: 3.29.3
   rollup-plugin-typescript2:
-    specifier: ^0.35.0
-    version: 0.35.0(rollup@3.29.3)(typescript@5.1.6)
+    specifier: ^0.36.0
+    version: 0.36.0(rollup@3.29.3)(typescript@5.1.6)
   rollup-plugin-uglify:
     specifier: ^6.0.4
     version: 6.0.4(rollup@3.29.3)
@@ -2124,8 +2124,8 @@ packages:
       supports-preserve-symlinks-flag: 1.0.0
     dev: true
 
-  /rollup-plugin-typescript2@0.35.0(rollup@3.29.3)(typescript@5.1.6):
-    resolution: {integrity: sha512-szcIO9hPUx3PhQl91u4pfNAH2EKbtrXaES+m163xQVE5O1CC0ea6YZV/5woiDDW3CR9jF2CszPrKN+AFiND0bg==}
+  /rollup-plugin-typescript2@0.36.0(rollup@3.29.3)(typescript@5.1.6):
+    resolution: {integrity: sha512-NB2CSQDxSe9+Oe2ahZbf+B4bh7pHwjV5L+RSYpCu7Q5ROuN94F9b6ioWwKfz3ueL3KTtmX4o2MUH2cgHDIEUsw==}
     peerDependencies:
       rollup: '>=1.26.3'
       typescript: '>=2.4.0'
@@ -2134,7 +2134,7 @@ packages:
       find-cache-dir: 3.3.2
       fs-extra: 10.0.1
       rollup: 3.29.3
-      semver: 7.5.1
+      semver: 7.5.4
       tslib: 2.6.2
       typescript: 5.1.6
     dev: true
@@ -2171,14 +2171,6 @@ packages:
   /semver@6.3.0:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
     hasBin: true
-    dev: true
-
-  /semver@7.5.1:
-    resolution: {integrity: sha512-Wvss5ivl8TMRZXXESstBA4uR5iXgEN/VC5/sOcuXdVLzcdkz4HWetIoRfG5gb5X+ij/G9rw9YoGn3QoQ8OCSpw==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      lru-cache: 6.0.0
     dev: true
 
   /semver@7.5.3:

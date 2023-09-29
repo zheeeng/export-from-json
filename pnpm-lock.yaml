@@ -19,13 +19,13 @@ devDependencies:
     version: 29.7.0(@types/node@20.7.1)
   rollup:
     specifier: ^3.26.3
-    version: 3.29.3
+    version: 3.29.4
   rollup-plugin-typescript2:
     specifier: ^0.36.0
-    version: 0.36.0(rollup@3.29.3)(typescript@5.1.6)
+    version: 0.36.0(rollup@3.29.4)(typescript@5.1.6)
   rollup-plugin-uglify:
     specifier: ^6.0.4
-    version: 6.0.4(rollup@3.29.3)
+    version: 6.0.4(rollup@3.29.4)
   ts-jest:
     specifier: ^29.1.1
     version: 29.1.1(@babel/core@7.17.8)(jest@29.7.0)(typescript@5.1.6)
@@ -2124,7 +2124,7 @@ packages:
       supports-preserve-symlinks-flag: 1.0.0
     dev: true
 
-  /rollup-plugin-typescript2@0.36.0(rollup@3.29.3)(typescript@5.1.6):
+  /rollup-plugin-typescript2@0.36.0(rollup@3.29.4)(typescript@5.1.6):
     resolution: {integrity: sha512-NB2CSQDxSe9+Oe2ahZbf+B4bh7pHwjV5L+RSYpCu7Q5ROuN94F9b6ioWwKfz3ueL3KTtmX4o2MUH2cgHDIEUsw==}
     peerDependencies:
       rollup: '>=1.26.3'
@@ -2133,26 +2133,26 @@ packages:
       '@rollup/pluginutils': 4.2.0
       find-cache-dir: 3.3.2
       fs-extra: 10.0.1
-      rollup: 3.29.3
+      rollup: 3.29.4
       semver: 7.5.4
       tslib: 2.6.2
       typescript: 5.1.6
     dev: true
 
-  /rollup-plugin-uglify@6.0.4(rollup@3.29.3):
+  /rollup-plugin-uglify@6.0.4(rollup@3.29.4):
     resolution: {integrity: sha512-ddgqkH02klveu34TF0JqygPwZnsbhHVI6t8+hGTcYHngPkQb5MIHI0XiztXIN/d6V9j+efwHAqEL7LspSxQXGw==}
     peerDependencies:
       rollup: '>=0.66.0 <2'
     dependencies:
       '@babel/code-frame': 7.16.7
       jest-worker: 24.9.0
-      rollup: 3.29.3
+      rollup: 3.29.4
       serialize-javascript: 2.1.2
       uglify-js: 3.15.3
     dev: true
 
-  /rollup@3.29.3:
-    resolution: {integrity: sha512-T7du6Hum8jOkSWetjRgbwpM6Sy0nECYrYRSmZjayFcOddtKJWU4d17AC3HNUk7HRuqy4p+G7aEZclSHytqUmEg==}
+  /rollup@3.29.4:
+    resolution: {integrity: sha512-oWzmBZwvYrU0iJHtDmhsm662rC15FRXmcjCk1xD771dFDx5jJ02ufAQQTn0etB2emNk4J9EZg/yWKpsn9BWGRw==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:

@@ -28,6 +28,8 @@
 ]
 </pre>
 <label>file name: <input id="fileName" value="books" placeholder="file name"/></label>
+<label>CSV delimiter: <input id="delimiter" value="," placeholder="CSV Delimiter"/></label>
+<br />
 <button onclick="downloadText('txt')">download plain text file</button>
 <button onclick="downloadText('css')">download css file</button>
 <button onclick="downloadText('html')">download html file</button>
@@ -56,6 +58,7 @@
     const exportFromJSON = window.exportFromJSON
     const $data = document.getElementById('data')
     const $fileName = document.getElementById('fileName')
+    const $delimiter = document.getElementById('delimiter')
     const $content = document.getElementById('content')
     const $useFields = document.getElementById('useFields')
 
@@ -69,8 +72,9 @@
 
     function download (exportType) {
         const fileName = $fileName.value
+        const delimiter = $delimiter.value
         const data = JSON.parse($data.innerText)
-        const fields = $useFields.value ? ['Name', 'Author', 'Subject'] : []
+        const fields = $useFields.checked ? ['Name', 'Author', 'Subject'] : []
 
         exportFromJSON({ data, fileName, fields, exportType })
     }
@@ -78,15 +82,16 @@
     function downloadText (exportType) {
         const fileName = $fileName.value
 
-        exportFromJSON({ data: $data.innerText, fileName, exportType })
+        exportFromJSON({ data: $data.innerText, fileName, delimiter, exportType, })
     }
 
     function show (exportType) {
         const fileName = $fileName.value
+        const delimiter = $delimiter.value
         const data = JSON.parse($data.innerText)
-        const fields = $useFields.value ? ['Name', 'Author', 'Subject'] : []
+        const fields = $useFields.checked ? ['Name', 'Author', 'Subject'] : []
 
-        const output = exportFromJSON({ data, fileName, fields, exportType, processor: content => content })
+        const output = exportFromJSON({ data, fileName, fields, delimiter, exportType, processor: content => content })
         $content.innerText = output
     }
 </script>

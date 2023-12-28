@@ -110,8 +110,9 @@ export function _createTableEntries (
 //       (not all programs support values with line breaks).
 // Rule: All other fields do not require double quotes.
 // Rule: Double quotes within values are represented by two contiguous double quotes.
-function encloser (value: string) {
-  const enclosingCharacter = /,|"|\n/.test(value) ? '"' : ''
+function encloser (value: string, delimiter: ',' | ';') {
+  const enclosingTester = new RegExp(`${delimiter}|"|\n`)
+  const enclosingCharacter = enclosingTester.test(value) ? '"' : ''
   const escaped = value.replace(/"/g, '""')
 
   return `${enclosingCharacter}${escaped}${enclosingCharacter}`
@@ -140,7 +141,7 @@ export function createCSVData (
   // Rule: Rows are separated by line breaks (newline characters).
   const head = tableEntries.map(({ fieldName }) => fieldName).join(delimiter) + '\r\n'
   const columns = tableEntries.map(({ fieldValues }) => fieldValues)
-    .map(column => column.map(encloser))
+    .map(column => column.map(value => encloser(value, delimiter)))
   const rows = columns.reduce(
     (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value}${delimiter}${column[rowIndex]}`),
   )

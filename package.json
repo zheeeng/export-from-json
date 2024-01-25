@@ -50,7 +50,7 @@
   "devDependencies": {
     "@types/jest": "^29.5.3",
     "@types/node": "^20.4.4",
-    "husky": "^8.0.3",
+    "husky": "^9.0.1",
     "jest": "^29.6.1",
     "rollup": "^4.0.0",
     "rollup-plugin-typescript2": "^0.36.0",

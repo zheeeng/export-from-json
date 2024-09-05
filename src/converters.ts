@@ -110,8 +110,8 @@ export function _createTableEntries (
 //       (not all programs support values with line breaks).
 // Rule: All other fields do not require double quotes.
 // Rule: Double quotes within values are represented by two contiguous double quotes.
-function encloser (value: string, delimiter: ',' | ';') {
-  const enclosingTester = new RegExp(`${delimiter}|"|\n`)
+function encloser (value: string, delimiter: ',' | ';' | '\t') {
+  const enclosingTester = new RegExp(`${delimiter === "\t" ? "\\t" : delimiter}|"|\n`)
   const enclosingCharacter = enclosingTester.test(value) ? '"' : ''
   const escaped = value.replace(/"/g, '""')
 
@@ -120,7 +120,7 @@ function encloser (value: string, delimiter: ',' | ';') {
 
 interface CreateCSVDataOptions {
   beforeTableEncode?: (entries: ITableEntries) => ITableEntries,
-  delimiter?: ',' | ';',
+  delimiter?: ',' | ';' | "\t",
 }
 
 const defaultCreateCSVDataOption: Required<CreateCSVDataOptions> = { beforeTableEncode: i => i, delimiter: ',' }

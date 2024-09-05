@@ -101,6 +101,9 @@ http.createServer(function (request, response){
                 case 'csv':
                     response.setHeader('Content-Type', 'text/csv')
                     break
+                case 'tsv':
+                    response.setHeader('Content-Type', 'text/tsv')
+                    break
                 case 'xls':
                     response.setHeader('Content-Type', 'application/vnd.ms-excel')
                     break
@@ -119,18 +122,18 @@ http.createServer(function (request, response){
 
 **Note:** `JSON` refers to a parsable JSON string or a serializable JavaScript object.
 
-| Option name | Required | Type | Description
-| ----------- | -------- | ---- | ----
-| data        | true     | `Array<JSON>`, `JSON` or `string` | If the exportType is 'json', data can be any parsable JSON. If the exportType is 'csv' or 'xls', data can only be an array of parsable JSON.  If the exportType is 'txt', 'css', 'html', the data must be a string type.
-| fileName    | false    | string | filename without extension, default to `'download'`
-| extension    | false    | string | filename extension, by default it takes the exportType
-| fileNameFormatter    | false    | `(name: string) => string` | filename formatter, by default the file name will be formatted to snake case
-| fields      | false    | `string[]` or field name mapper type `Record<string, string>`  | fields filter, also supports mapper field name by passing an name mapper, e.g. { 'bar': 'baz' }, default to `undefined`
-| exportType  | false    | Enum ExportType | 'txt'(default), 'css', 'html', 'json', 'csv', 'xls', 'xml'
-| processor   | false    | `(content: string, type: ExportType, fileName: string) => any` | default to a front-end downloader
-| withBOM     | false    | boolean | Add BOM(byte order mark) meta to CSV file. BOM is expected by `Excel` when reading UTF8 CSV file. It is default to `false`.
-| beforeTableEncode     | false    | `(entries: { fieldName: string, fieldValues: string[] }[]) => { fieldName: string, fieldValues: string[] }[]` | Given a chance to altering table entries, only works for `CSV` and `XLS` file, by default no altering.
-| delimiter   | false    | `',' \| ';'` | Specify CSV raw data's delimiter between values. It is default to `,`
+| Option name | Required | Type                                                                                                          | Description                                                                                                                                                                                                              
+| ----------- | -------- |---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| data        | true     | `Array<JSON>`, `JSON` or `string`                                                                             | If the exportType is 'json', data can be any parsable JSON. If the exportType is 'csv' or 'xls', data can only be an array of parsable JSON.  If the exportType is 'txt', 'css', 'html', the data must be a string type. 
+| fileName    | false    | string                                                                                                        | filename without extension, default to `'download'`                                                                                                                                                                      
+| extension    | false    | string                                                                                                        | filename extension, by default it takes the exportType                                                                                                                                                                   
+| fileNameFormatter    | false    | `(name: string) => string`                                                                                    | filename formatter, by default the file name will be formatted to snake case                                                                                                                                             
+| fields      | false    | `string[]` or field name mapper type `Record<string, string>`                                                 | fields filter, also supports mapper field name by passing an name mapper, e.g. { 'bar': 'baz' }, default to `undefined`                                                                                                  
+| exportType  | false    | Enum ExportType                                                                                               | 'txt'(default), 'css', 'html', 'json', 'csv', 'xls', 'xml', 'tsv'                                                                                                                                                        
+| processor   | false    | `(content: string, type: ExportType, fileName: string) => any`                                                | default to a front-end downloader                                                                                                                                                                                        
+| withBOM     | false    | boolean                                                                                                       | Add BOM(byte order mark) meta to CSV file. BOM is expected by `Excel` when reading UTF8 CSV file. It is default to `false`.                                                                                              
+| beforeTableEncode     | false    | `(entries: { fieldName: string, fieldValues: string[] }[]) => { fieldName: string, fieldValues: string[] }[]` | Given a chance to altering table entries, only works for `CSV` and `XLS` file, by default no altering.                                                                                                                   
+| delimiter   | false    | `',' \| ';' \| '\t'`                                                                                          | Specify CSV/TSV raw data's delimiter between values. It is default to `,`
 
 ### Tips
 

@@ -30,8 +30,9 @@ export function generateDataURI (content: string, type: ExportType, byBlob: bool
 
       return `data:,${blobType}` + encodeURIComponent(content)
     }
+    case "tsv":
     case 'csv': {
-      const blobType = 'text/csv;charset=utf-8'
+      const blobType = `text/${type};charset=utf-8`
 
       if (byBlob) return URL.createObjectURL(new Blob([content], { type: blobType }))
 

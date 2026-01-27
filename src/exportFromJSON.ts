@@ -16,7 +16,7 @@ export interface IOption<R = void> {
   beforeTableEncode?: (
     tableRow: Array<{ fieldName: string, fieldValues: string[] }>,
   ) => Array<{ fieldName: string, fieldValues: string[]}>
-  delimiter?: ',' | ';'
+  delimiter?: ',' | ';' | '\t'
 }
 
 function exportFromJSON<R = void> ({
@@ -31,7 +31,7 @@ function exportFromJSON<R = void> ({
   processor = downloadFile as never,
   withBOM = false,
   beforeTableEncode = (i) => i,
-  delimiter = ',',
+  delimiter,
 }: IOption<R>): R {
   const MESSAGE_IS_ARRAY_FAIL = 'Invalid export data. Please provide an array of objects'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`
@@ -64,13 +64,19 @@ function exportFromJSON<R = void> ({
     case 'json': {
       return processor(JSONData, exportType, normalizeFileName(fileName, extension ?? 'json', fileNameFormatter))
     }
+    case 'tsv':
     case 'csv': {
       assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
       const BOM = '\ufeff'
+
+      if(delimiter === undefined) {
+        delimiter = exportType === 'tsv' ? '\t' : ',';
+      }
+
       const CSVData = createCSVData(safeData, { beforeTableEncode, delimiter })
       const content = withBOM ? BOM + CSVData : CSVData
 
-      return processor(content, exportType, normalizeFileName(fileName, extension ?? 'csv', fileNameFormatter))
+      return processor(content, exportType, normalizeFileName(fileName, extension ?? exportType, fileNameFormatter))
     }
     case 'xls': {
       assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)

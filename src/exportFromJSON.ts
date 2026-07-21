@@ -20,7 +20,11 @@ export interface IOption<R = void> {
 }
 
 function isTableData (data: unknown): data is Array<Record<string, unknown>> {
-  return isArray(data) && data.every(row => row !== null && typeof row === 'object' && !isArray(row))
+  return isArray(data) && data.every(row => {
+    if (row === null || typeof row !== 'object' || isArray(row)) return false
+    // Reject class instances (Date, Map, etc.), accept only plain objects
+    return Object.getPrototypeOf(row) === Object.prototype || Object.getPrototypeOf(row) === null
+  })
 }
 
 function exportFromJSON<R = void> ({
@@ -45,6 +49,12 @@ function exportFromJSON<R = void> ({
 
   const fieldsMapper = _createFieldsMapper(fields)
   const preparedData = _prepareData(data)
+
+  // For CSV/XLS exports, validate table structure before field mapping to prevent errors
+  if ((exportType === 'csv' || exportType === 'xls') && fields) {
+    assert(isTableData(preparedData), MESSAGE_IS_ARRAY_FAIL)
+  }
+
   const safeData = fields
     ? fieldsMapper(preparedData as Record<string, unknown> | Array<Record<string, unknown>>)
     : preparedData

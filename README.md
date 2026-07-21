@@ -121,6 +121,9 @@ http.createServer(function (request, response){
 For `json`, `csv`, `xls`, and `xml` exports, string input is parsed as JSON. For `txt`, `css`, and `html`
 exports, string input is exported as-is.
 
+For `csv` and `xls` exports, parsed input must be an array of plain objects (each row must be a non-null,
+non-array object). Primitives, `null` values, arrays, and class instances in row positions are rejected.
+
 | Option name | Required | Type | Description
 | ----------- | -------- | ---- | ----
 | data        | true     | `Array<JSON>`, `JSON` or `string` | If the exportType is 'json', data can be any parsable JSON. If the exportType is 'csv' or 'xls', data can only be an array of parsable JSON.  If the exportType is 'txt', 'css', 'html', the data must be a string type.

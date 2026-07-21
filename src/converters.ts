@@ -110,10 +110,15 @@ export function _createTableEntries (
 //       (not all programs support values with line breaks).
 // Rule: All other fields do not require double quotes.
 // Rule: Double quotes within values are represented by two contiguous double quotes.
+// Security: Prevent formula injection by prefixing values that start with dangerous characters.
 function encloser (value: string, delimiter: ',' | ';') {
+  // Neutralize spreadsheet formula injection
+  const formulaStartPattern = /^[=+\-@\t\r]/
+  const safeValue = formulaStartPattern.test(value) ? "'" + value : value
+
   const enclosingTester = new RegExp(`${delimiter}|"|\n`)
-  const enclosingCharacter = enclosingTester.test(value) ? '"' : ''
-  const escaped = value.replace(/"/g, '""')
+  const enclosingCharacter = enclosingTester.test(safeValue) ? '"' : ''
+  const escaped = safeValue.replace(/"/g, '""')
 
   return `${enclosingCharacter}${escaped}${enclosingCharacter}`
 }

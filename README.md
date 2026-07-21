@@ -118,6 +118,8 @@ http.createServer(function (request, response){
 ## Types
 
 **Note:** `JSON` refers to a parsable JSON string or a serializable JavaScript object.
+For `json`, `csv`, `xls`, and `xml` exports, string input is parsed as JSON. For `txt`, `css`, and `html`
+exports, string input is exported as-is.
 
 | Option name | Required | Type | Description
 | ----------- | -------- | ---- | ----

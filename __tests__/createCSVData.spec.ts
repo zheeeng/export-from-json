@@ -16,3 +16,12 @@ test('createCSVData works correctly with delimiter option', () => {
 test('createCSVData works with empty array', () => {
   expect(createCSVData([])).toEqual('')
 })
+
+test('createCSVData escapes field names', () => {
+  expect(createCSVData([{ 'first,name': 'Ada', 'say"hello': 'yes' }]))
+    .toEqual('"first,name","say""hello"\r\nAda,yes')
+})
+
+test('createCSVData works with rows that have no fields', () => {
+  expect(createCSVData([{}])).toEqual('')
+})

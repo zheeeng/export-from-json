@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`createXLSData works correctly 1`] = `
 "<html>
@@ -14,7 +14,7 @@ exports[`createXLSData works correctly 1`] = `
       <tbody>
         <tr><td>hello</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
         <tr><td></td><td>foo</td><td>bar</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        <tr><td></td><td></td><td></td><td>100</td><td>[1,2,3]</td><td>{"x":200,"y":300}</td><td>D</td><td>null</td><td></td></tr>
+        <tr><td></td><td></td><td></td><td>100</td><td>[1,2,3]</td><td>{&quot;x&quot;:200,&quot;y&quot;:300}</td><td>D</td><td>null</td><td></td></tr>
       </tbody>
     </table>
   

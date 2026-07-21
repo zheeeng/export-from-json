@@ -1,4 +1,4 @@
-import { isArray, getEntries, normalizeXMLName, indent, stripHTML, assert, getKeys } from './utils.js'
+import { isArray, getEntries, normalizeXMLName, indent, stripHTML, escapeHTML, assert, getKeys } from './utils.js'
 
 export function _createFieldsMapper (fields?: string[] | Record<string, string>) {
   if (
@@ -47,10 +47,10 @@ export function _createFieldsMapper (fields?: string[] | Record<string, string>)
   }
 }
 
-export function _prepareData (data: object | string): Record<string, unknown> {
+export function _prepareData (data: object | string): unknown {
   const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide a valid JSON'
   try {
-    return (typeof data === 'string' ? JSON.parse(data) : data) as Record<string, unknown>
+    return typeof data === 'string' ? JSON.parse(data) : data
   } catch {
     throw new Error(MESSAGE_VALID_JSON_FAIL)
   }
@@ -79,7 +79,7 @@ export function _createTableMap (data: any[]): ITableMap {
     (tMap, rowKVs, rowIndex) =>
       rowKVs.reduce(
         (map, [key, value]) => {
-          const columnValues = map[key] || Array.from({ length: data.length }).map(_ => '')
+          const columnValues = map[key] || Array.from({ length: data.length }).map(() => '')
           columnValues[rowIndex] =
             (typeof value !== 'string' ? JSON.stringify(value) : value) || ''
           map[key] = columnValues
@@ -139,7 +139,9 @@ export function createCSVData (
 
   // Rule: Columns (fields) are separated by commas.
   // Rule: Rows are separated by line breaks (newline characters).
-  const head = tableEntries.map(({ fieldName }) => fieldName).join(delimiter) + '\r\n'
+  if (!tableEntries.length) return ''
+
+  const head = tableEntries.map(({ fieldName }) => encloser(fieldName, delimiter)).join(delimiter) + '\r\n'
   const columns = tableEntries.map(({ fieldValues }) => fieldValues)
     .map(column => column.map(value => encloser(value, delimiter)))
   const rows = columns.reduce(
@@ -157,10 +159,13 @@ export function _renderTableHTMLText (
 
   const tableMap = _createTableMap(data)
   const tableEntries = _createTableEntries(tableMap, beforeTableEncode)
-  const head = tableEntries.map(({ fieldName }) => fieldName)
+
+  if (!tableEntries.length) return ''
+
+  const head = tableEntries.map(({ fieldName }) => escapeHTML(fieldName))
     .join('</b></th><th><b>')
   const columns = tableEntries.map(({ fieldValues }) => fieldValues)
-    .map(column => column.map(value => `<td>${value}</td>`))
+    .map(column => column.map(value => `<td>${escapeHTML(value)}</td>`))
   const rows = columns.reduce(
     (mergedColumn, column) => mergedColumn
       .map((value, rowIndex) => `${value}${column[rowIndex]}`),
@@ -190,13 +195,17 @@ export function createXLSData (data: any[], options?: CreateXLSDataOptions) {
 
   if (!data.length) return ''
 
+  const table = _renderTableHTMLText(data, beforeTableEncode)
+
+  if (!table) return ''
+
   const content =
 `<html>
   <head>
     <meta charset="UTF-8" />
   </head >
   <body>
-    ${_renderTableHTMLText(data, beforeTableEncode)}
+    ${table}
   </body>
 </html >
 `
@@ -215,7 +224,7 @@ ${_renderXML(data, 'base')}
 }
 
 function _renderXML (data: any, tagName: string, arrayElementTag = 'element', spaces = 0): string {
-  const tag = normalizeXMLName(tagName)
+  const tag = normalizeXMLName(tagName) || normalizeXMLName(arrayElementTag) || 'element'
   const indentSpaces = indent(spaces)
 
   if (data === null || data === undefined) {

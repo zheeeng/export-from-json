@@ -5,15 +5,16 @@ const pkg = require('../package.json')
 
 // relative to project root
 const inputFileName = 'src/index.ts'
-const outputFileName = pkg.main
-const compressedOutputFileName = pkg.main.replace(/\.js$/, '.min.js')
+const commonJSOutputFileName = pkg.main
+const browserOutputFileName = 'dist/umd/index.js'
+const compressedBrowserOutputFileName = 'dist/umd/index.min.js'
 const umdNamespace = 'exportFromJSON'
 const umdTSConfig = 'config/tsconfig.umd.json'
 
-const createUMDTemplate = (isUglify = false) => ({
+const createUMDTemplate = (file, isUglify = false) => ({
   input: inputFileName,
   output: {
-    file: isUglify ? compressedOutputFileName : outputFileName,
+    file,
     format: 'umd',
     name: umdNamespace,
   },
@@ -26,8 +27,9 @@ const createUMDTemplate = (isUglify = false) => ({
 })
 
 const config = [
-  createUMDTemplate(false),
-  createUMDTemplate(true),
+  createUMDTemplate(commonJSOutputFileName),
+  createUMDTemplate(browserOutputFileName),
+  createUMDTemplate(compressedBrowserOutputFileName, true),
 ]
 
 export default config

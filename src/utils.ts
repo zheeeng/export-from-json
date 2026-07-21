@@ -20,16 +20,15 @@ export function getEntries<T> (data: Record<string, T>) {
 
 export function normalizeFileName (fileName: string, extension: string, fileNameFormatter: (name: string) => string) {
   const suffix = '.' + extension
+  const formattedFileName = fileNameFormatter(fileName)
 
-  const extensionPattern = new RegExp(`(\\${extension})?$`)
-
-  return fileNameFormatter(fileName).replace(extensionPattern, suffix)
+  return formattedFileName.endsWith(suffix) ? formattedFileName : formattedFileName + suffix
 }
 
 export function normalizeXMLName (name: string) {
   '555xmlHello .  world!'.trim().replace(/^([0-9,;]|(xml))+/, '')
 
-  return name.replace(/[^_a-zA-Z 0-9:\-\.]/g, '').replace(/^([ 0-9-:\-\.]|(xml))+/i, '').replace(/ +/g, '-')
+  return name.replace(/[^_a-zA-Z 0-9:.-]/g, '').replace(/^([ 0-9:.-]|(xml))+/i, '').replace(/ +/g, '-')
 }
 
 export function indent (spaces: number) {
@@ -42,6 +41,19 @@ export function stripHTML (text: string) {
       case '<': return '&lt;'
       case '>': return '&gt;'
       case '&': return '&amp;'
+      default: return ''
+    }
+  })
+}
+
+export function escapeHTML (text: string) {
+  return text.replace(/([<>&"'])/g, character => {
+    switch (character) {
+      case '<': return '&lt;'
+      case '>': return '&gt;'
+      case '&': return '&amp;'
+      case '"': return '&quot;'
+      case "'": return '&#39;'
       default: return ''
     }
   })

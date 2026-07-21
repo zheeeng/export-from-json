@@ -19,6 +19,10 @@ export interface IOption<R = void> {
   delimiter?: ',' | ';'
 }
 
+function isTableData (data: unknown): data is Array<Record<string, unknown>> {
+  return isArray(data) && data.every(row => row !== null && typeof row === 'object' && !isArray(row))
+}
+
 function exportFromJSON<R = void> ({
   data,
   fileName = 'download',
@@ -35,26 +39,17 @@ function exportFromJSON<R = void> ({
 }: IOption<R>): R {
   const MESSAGE_IS_ARRAY_FAIL = 'Invalid export data. Please provide an array of objects'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`
-  const MESSAGE_FIELD_INVALID = `Can't export string data to ${exportType}.`
-
-  if (typeof data === 'string') {
-    switch (exportType) {
-      case 'txt':
-      case 'css':
-      case 'html': {
-          return processor(data, exportType, normalizeFileName(fileName, extension ?? exportType, fileNameFormatter))
-        }
-      default:
-        throw new Error(MESSAGE_FIELD_INVALID)
-    }
+  if (typeof data === 'string' && (exportType === 'txt' || exportType === 'css' || exportType === 'html')) {
+    return processor(data, exportType, normalizeFileName(fileName, extension ?? exportType, fileNameFormatter))
   }
 
   const fieldsMapper = _createFieldsMapper(fields)
+  const preparedData = _prepareData(data)
+  const safeData = fields
+    ? fieldsMapper(preparedData as Record<string, unknown> | Array<Record<string, unknown>>)
+    : preparedData
 
-  const safeData = fieldsMapper(_prepareData(data))
-
-  const JSONData = _createJSONData(safeData, replacer, space)
-
+  const JSONData = _createJSONData(safeData as object, replacer, space)
   switch (exportType) {
     case 'txt':
     case 'css':
@@ -65,7 +60,7 @@ function exportFromJSON<R = void> ({
       return processor(JSONData, exportType, normalizeFileName(fileName, extension ?? 'json', fileNameFormatter))
     }
     case 'csv': {
-      assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
+      assert(isTableData(safeData), MESSAGE_IS_ARRAY_FAIL)
       const BOM = '\ufeff'
       const CSVData = createCSVData(safeData, { beforeTableEncode, delimiter })
       const content = withBOM ? BOM + CSVData : CSVData
@@ -73,13 +68,13 @@ function exportFromJSON<R = void> ({
       return processor(content, exportType, normalizeFileName(fileName, extension ?? 'csv', fileNameFormatter))
     }
     case 'xls': {
-      assert(isArray(safeData), MESSAGE_IS_ARRAY_FAIL)
+      assert(isTableData(safeData), MESSAGE_IS_ARRAY_FAIL)
       const content = createXLSData(safeData, { beforeTableEncode })
 
       return processor(content, exportType, normalizeFileName(fileName, extension ?? 'xls', fileNameFormatter))
     }
     case 'xml': {
-      const content = createXMLData(safeData)
+      const content = createXMLData(safeData as object)
 
       return processor(content, exportType, normalizeFileName(fileName, extension ?? 'xml', fileNameFormatter))
     }

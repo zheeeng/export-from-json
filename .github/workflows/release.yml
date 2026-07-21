@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Publish ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    environment: npm
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Verify tag matches package version
+        shell: bash
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          package_version="$(node -p "require('./package.json').version")"
+
+          if [[ "$tag_version" != "$package_version" ]]; then
+            echo "Tag version ($tag_version) does not match package.json ($package_version)." >&2
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Test
+        run: pnpm test -- --runInBand
+
+      - name: Build
+        run: pnpm build
+
+      - name: Verify package contents
+        run: npm pack --dry-run
+
+      - name: Publish to npm
+        shell: bash
+        run: |
+          package_name="$(node -p "require('./package.json').name")"
+          package_version="$(node -p "require('./package.json').version")"
+
+          if npm view "$package_name@$package_version" version >/dev/null 2>&1; then
+            echo "$package_name@$package_version is already published; skipping npm publish."
+            exit 0
+          fi
+
+          publish_args=(--access public --provenance)
+          if [[ "$package_version" == *-* ]]; then
+            publish_args+=(--tag next)
+          fi
+
+          npm publish "${publish_args[@]}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "GitHub release $GITHUB_REF_NAME already exists; skipping creation."
+          else
+            gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag
+          fi

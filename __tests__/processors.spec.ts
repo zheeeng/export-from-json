@@ -16,7 +16,7 @@ describe('generateDataURI', () => {
 })
 
 describe('downloadFile', () => {
-  it('revokes the generated Blob URL after dispatching the download', () => {
+  it('revokes the generated Blob URL after dispatching the download', async () => {
     const anchor = {
       href: '',
       download: '',
@@ -48,6 +48,13 @@ describe('downloadFile', () => {
       expect(anchor.href).toBe('blob:test')
       expect(anchor.download).toBe('report.txt')
       expect(anchor.dispatchEvent).toHaveBeenCalledTimes(1)
+
+      // Revocation should not have happened yet (deferred via setTimeout)
+      expect(revokeObjectURL).not.toHaveBeenCalled()
+
+      // Wait for deferred task to execute
+      await new Promise(resolve => setTimeout(resolve, 0))
+
       expect(revokeObjectURL).toHaveBeenCalledWith('blob:test')
     } finally {
       createObjectURL.mockRestore()

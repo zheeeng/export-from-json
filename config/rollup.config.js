@@ -1,6 +1,8 @@
 import typescript from 'rollup-plugin-typescript2'
+import terser from '@rollup/plugin-terser'
+import { createRequire } from 'module'
 
-const uglify = require('rollup-plugin-uglify').uglify
+const require = createRequire(import.meta.url)
 const pkg = require('../package.json')
 
 // relative to project root
@@ -11,7 +13,7 @@ const compressedBrowserOutputFileName = 'dist/umd/index.min.js'
 const umdNamespace = 'exportFromJSON'
 const umdTSConfig = 'config/tsconfig.umd.json'
 
-const createUMDTemplate = (file, isUglify = false) => ({
+const createUMDTemplate = (file, isMinified = false) => ({
   input: inputFileName,
   output: {
     file,
@@ -22,7 +24,7 @@ const createUMDTemplate = (file, isUglify = false) => ({
     typescript({
       tsconfig: umdTSConfig,
     }),
-    isUglify && uglify(),
+    isMinified && terser(),
   ],
 })
 

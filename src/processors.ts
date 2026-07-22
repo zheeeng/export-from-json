@@ -37,5 +37,5 @@ export function downloadFile (content: string, type: ExportType, fileName: strin
   )
   document.body.removeChild(anchor)
 
-  if (byBlob) URL.revokeObjectURL(dataURI)
+  if (byBlob) setTimeout(() => URL.revokeObjectURL(dataURI), 0)
 }

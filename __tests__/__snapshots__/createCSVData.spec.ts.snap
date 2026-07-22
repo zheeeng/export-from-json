@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`createCSVData works correctly 1`] = `
 "greeting,foo,bar,a,b,c,d,e,f

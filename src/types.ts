@@ -1,4 +1,4 @@
-export type ExportType = 'txt' | 'json' | 'csv' | 'xls' | 'xml' | 'css' | 'html'
+export type ExportType = 'txt' | 'json' | 'csv' | 'tsv' | 'xls' | 'xml' | 'css' | 'html'
 
 export const exportTypes: { [ET in ExportType]: ET } = {
     txt : 'txt',
@@ -6,6 +6,7 @@ export const exportTypes: { [ET in ExportType]: ET } = {
     html : 'html',
     json : 'json',
     csv : 'csv',
+    tsv : 'tsv',
     xls : 'xls',
     xml : 'xml',
 }

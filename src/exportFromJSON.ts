@@ -60,8 +60,8 @@ function exportFromJSON<R = void> ({
   const fieldsMapper = _createFieldsMapper(fields)
   const preparedData = _prepareData(data)
 
-  // For CSV/XLS exports, validate table structure before field mapping to prevent errors
-  if ((exportType === 'csv' || exportType === 'xls') && fields) {
+  // Validate table structure before field mapping to prevent errors.
+  if ((exportType === 'csv' || exportType === 'tsv' || exportType === 'xls') && fields) {
     assert(isTableData(preparedData), MESSAGE_IS_ARRAY_FAIL)
   }
 
@@ -79,13 +79,19 @@ function exportFromJSON<R = void> ({
     case 'json': {
       return processor(JSONData, exportType, normalizeFileName(fileName, extension ?? 'json', fileNameFormatter))
     }
-    case 'csv': {
+    case 'csv':
+    case 'tsv': {
       assert(isTableData(safeData), MESSAGE_IS_ARRAY_FAIL)
       const BOM = '\ufeff'
-      const CSVData = createCSVData(safeData, { beforeTableEncode, delimiter, escapeFormulae })
-      const content = withBOM ? BOM + CSVData : CSVData
+      const tableDelimiter = exportType === 'tsv' ? '\t' : delimiter
+      const tableData = createCSVData(safeData, {
+        beforeTableEncode,
+        delimiter: tableDelimiter,
+        escapeFormulae,
+      })
+      const content = withBOM ? BOM + tableData : tableData
 
-      return processor(content, exportType, normalizeFileName(fileName, extension ?? 'csv', fileNameFormatter))
+      return processor(content, exportType, normalizeFileName(fileName, extension ?? exportType, fileNameFormatter))
     }
     case 'xls': {
       assert(isTableData(safeData), MESSAGE_IS_ARRAY_FAIL)

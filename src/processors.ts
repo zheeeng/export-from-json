@@ -6,6 +6,7 @@ const mimeTypes: { [Type in ExportType]: string } = {
   html: 'text/html',
   json: 'application/json',
   csv: 'text/csv',
+  tsv: 'text/tab-separated-values',
   xls: 'application/vnd.ms-excel',
   xml: 'application/xml',
 }

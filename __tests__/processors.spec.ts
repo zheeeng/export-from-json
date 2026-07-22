@@ -7,6 +7,7 @@ describe('generateDataURI', () => {
     ['html', 'text/html'],
     ['json', 'application/json'],
     ['csv', 'text/csv'],
+    ['tsv', 'text/tab-separated-values'],
     ['xls', 'application/vnd.ms-excel'],
     ['xml', 'application/xml'],
   ] as const)('creates a standards-compliant %s data URI', (type, mimeType) => {

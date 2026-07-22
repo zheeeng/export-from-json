@@ -25,3 +25,13 @@ test('createCSVData escapes field names', () => {
 test('createCSVData works with rows that have no fields', () => {
   expect(createCSVData([{}])).toEqual('')
 })
+
+test('createCSVData preserves legitimate values and field names by default', () => {
+  expect(createCSVData([{ '-balance': -42, phone: '+8613800000000' }]))
+    .toEqual('-balance,phone\r\n-42,+8613800000000')
+})
+
+test('createCSVData escapes formula-like cell values only when enabled', () => {
+  expect(createCSVData([{ '-balance': '=1+1', note: '@SUM(A1)' }], { escapeFormulae: true }))
+    .toEqual("-balance,note\r\n'=1+1,'@SUM(A1)")
+})

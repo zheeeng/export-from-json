@@ -136,6 +136,7 @@ non-array object). Primitives, `null` values, arrays, and class instances in row
 | withBOM     | false    | boolean | Add BOM(byte order mark) meta to CSV file. BOM is expected by `Excel` when reading UTF8 CSV file. It is default to `false`.
 | beforeTableEncode     | false    | `(entries: { fieldName: string, fieldValues: string[] }[]) => { fieldName: string, fieldValues: string[] }[]` | Given a chance to altering table entries, only works for `CSV` and `XLS` file, by default no altering.
 | delimiter   | false    | `',' \| ';'` | Specify CSV raw data's delimiter between values. It is default to `,`
+| escapeFormulae   | false    | boolean | Prefix formula-like CSV cell values with a single quote to reduce spreadsheet formula injection risk. Field names are not modified. It is default to `false`.
 
 ### Tips
 

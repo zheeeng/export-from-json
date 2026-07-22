@@ -110,11 +110,9 @@ export function _createTableEntries (
 //       (not all programs support values with line breaks).
 // Rule: All other fields do not require double quotes.
 // Rule: Double quotes within values are represented by two contiguous double quotes.
-// Security: Prevent formula injection by prefixing values that start with dangerous characters.
-function encloser (value: string, delimiter: ',' | ';') {
-  // Neutralize spreadsheet formula injection
+function encloser (value: string, delimiter: ',' | ';', escapeFormulae = false) {
   const formulaStartPattern = /^[=+\-@\t\r]/
-  const safeValue = formulaStartPattern.test(value) ? "'" + value : value
+  const safeValue = escapeFormulae && formulaStartPattern.test(value) ? "'" + value : value
 
   const enclosingTester = new RegExp(`${delimiter}|"|\n`)
   const enclosingCharacter = enclosingTester.test(safeValue) ? '"' : ''
@@ -126,16 +124,21 @@ function encloser (value: string, delimiter: ',' | ';') {
 interface CreateCSVDataOptions {
   beforeTableEncode?: (entries: ITableEntries) => ITableEntries,
   delimiter?: ',' | ';',
+  escapeFormulae?: boolean,
 }
 
-const defaultCreateCSVDataOption: Required<CreateCSVDataOptions> = { beforeTableEncode: i => i, delimiter: ',' }
+const defaultCreateCSVDataOption: Required<CreateCSVDataOptions> = {
+  beforeTableEncode: i => i,
+  delimiter: ',',
+  escapeFormulae: false,
+}
 
 // Reference: https://techterms.com/definition/csv
 export function createCSVData (
   data: any[],
   options: CreateCSVDataOptions = {},
 ) {
-  const { beforeTableEncode, delimiter } = { ...defaultCreateCSVDataOption, ...options }
+  const { beforeTableEncode, delimiter, escapeFormulae } = { ...defaultCreateCSVDataOption, ...options }
 
   if (!data.length) return ''
 
@@ -148,7 +151,7 @@ export function createCSVData (
 
   const head = tableEntries.map(({ fieldName }) => encloser(fieldName, delimiter)).join(delimiter) + '\r\n'
   const columns = tableEntries.map(({ fieldValues }) => fieldValues)
-    .map(column => column.map(value => encloser(value, delimiter)))
+    .map(column => column.map(value => encloser(value, delimiter, escapeFormulae)))
   const rows = columns.reduce(
     (mergedColumn, column) => mergedColumn.map((value, rowIndex) => `${value}${delimiter}${column[rowIndex]}`),
   )

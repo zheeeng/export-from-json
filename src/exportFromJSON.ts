@@ -17,13 +17,22 @@ export interface IOption<R = void> {
     tableRow: Array<{ fieldName: string, fieldValues: string[] }>,
   ) => Array<{ fieldName: string, fieldValues: string[]}>
   delimiter?: ',' | ';'
+  escapeFormulae?: boolean
 }
 
 function isTableData (data: unknown): data is Array<Record<string, unknown>> {
   return isArray(data) && data.every(row => {
     if (row === null || typeof row !== 'object' || isArray(row)) return false
-    // Reject class instances (Date, Map, etc.), accept only plain objects
-    return Object.getPrototypeOf(row) === Object.prototype || Object.getPrototypeOf(row) === null
+    const prototype = Object.getPrototypeOf(row)
+
+    if (prototype === null) return true
+
+    const constructor = Object.prototype.hasOwnProperty.call(prototype, 'constructor')
+      ? prototype.constructor
+      : null
+
+    return typeof constructor === 'function'
+      && Function.prototype.toString.call(constructor) === Function.prototype.toString.call(Object)
   })
 }
 
@@ -40,6 +49,7 @@ function exportFromJSON<R = void> ({
   withBOM = false,
   beforeTableEncode = (i) => i,
   delimiter = ',',
+  escapeFormulae = false,
 }: IOption<R>): R {
   const MESSAGE_IS_ARRAY_FAIL = 'Invalid export data. Please provide an array of objects'
   const MESSAGE_UNKNOWN_EXPORT_TYPE = `Can't export unknown data type ${exportType}.`
@@ -72,7 +82,7 @@ function exportFromJSON<R = void> ({
     case 'csv': {
       assert(isTableData(safeData), MESSAGE_IS_ARRAY_FAIL)
       const BOM = '\ufeff'
-      const CSVData = createCSVData(safeData, { beforeTableEncode, delimiter })
+      const CSVData = createCSVData(safeData, { beforeTableEncode, delimiter, escapeFormulae })
       const content = withBOM ? BOM + CSVData : CSVData
 
       return processor(content, exportType, normalizeFileName(fileName, extension ?? 'csv', fileNameFormatter))

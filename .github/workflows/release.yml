@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6
@@ -56,7 +56,7 @@ jobs:
         run: pnpm build
 
       - name: Verify package contents
-        run: npm pack --dry-run
+        run: pnpm test:package
 
       - name: Publish to npm
         shell: bash

@@ -1,3 +1,4 @@
+import type { TableEntries, TableRow } from './types.js'
 import { isArray, getEntries, normalizeXMLName, indent, stripHTML, escapeHTML, assert, getKeys } from './utils.js'
 
 export function _createFieldsMapper (fields?: string[] | Record<string, string>) {
@@ -7,49 +8,37 @@ export function _createFieldsMapper (fields?: string[] | Record<string, string>)
     || !isArray(fields) && !getKeys(fields).length
   ) return (item: Record<string, unknown> | Array<Record<string, unknown>>) => item
 
-  const mapper = isArray(fields)
-    ? fields.reduce(
-        (map, key) => ({ ...map, [key]: key}),
-        Object.create(null) as Record<string, string>,
-      )
-    : fields
+  const mappings = isArray(fields)
+    ? fields.map(key => [key, key] as [string, string])
+    : getEntries(fields)
+
+  const targetNames = new Set<string>()
+  mappings.forEach(([, targetName]) => {
+    assert(!targetNames.has(targetName), 'Field aliases must be unique')
+    targetNames.add(targetName)
+  })
+
+  const project = (item: Record<string, unknown>) => mappings.reduce(
+    (map, [sourceName, targetName]) => {
+      map[targetName] = Object.prototype.hasOwnProperty.call(item, sourceName)
+        ? item[sourceName]
+        : undefined
+
+      return map
+    },
+    Object.create(null) as Record<string, unknown>,
+  )
 
   return (item: Record<string, unknown> | Array<Record<string, unknown>>) => {
-    if (isArray(item)) {
-      return item
-        .map(
-          i => getEntries<unknown>(i).reduce(
-            (map, [key, value]) => {
-              if (key in mapper) {
-                map[mapper[key]] = value
-              }
-
-              return map
-            },
-            Object.create(null) as Record<string, unknown>,
-          ),
-        )
-        .filter(
-          i => getKeys(i).length,
-        )
-    }
-
-    return getEntries<unknown>(item).reduce(
-      (map, [key, value]) => {
-        if (key in mapper) {
-          map[mapper[key]] = value
-        }
-
-        return map
-      },
-      Object.create(null) as Record<string, unknown>,
-    )
+    return isArray(item) ? item.map(project) : project(item)
   }
 }
 
 export function _prepareData (data: object | string): unknown {
   const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide a valid JSON'
   try {
+    assert(typeof data === 'string' || data !== null && typeof data === 'object')
+
     return typeof data === 'string' ? JSON.parse(data) : data
   } catch {
     throw new Error(MESSAGE_VALID_JSON_FAIL)
@@ -58,13 +47,17 @@ export function _prepareData (data: object | string): unknown {
 
 // TODO:: execute toSchema implicit converting
 export function _createJSONData (
-  data: object,
+  data: unknown,
   replacer: ((key: string, value: any) => any) | Array<number | string> | null = null,
   space: string | number,
 ) {
-  const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide valid JSON object'
+  const MESSAGE_VALID_JSON_FAIL = 'Invalid export data. Please provide valid JSON data'
   try {
-    return JSON.stringify(data, replacer as any, space)
+    const content = JSON.stringify(data, replacer as any, space)
+
+    if (content === undefined) throw new Error(MESSAGE_VALID_JSON_FAIL)
+
+    return content
   } catch {
     throw new Error(MESSAGE_VALID_JSON_FAIL)
   }
@@ -74,14 +67,33 @@ export interface ITableMap {
   [key: string]: string[],
 }
 
-export function _createTableMap (data: any[]): ITableMap {
+function serializeTableValue (value: unknown) {
+  return (typeof value !== 'string' ? JSON.stringify(value) : value) || ''
+}
+
+function getTableFields (data: TableRow[]) {
+  const seen = new Set<string>()
+  const fields: string[] = []
+
+  data.forEach(row => {
+    getKeys(row).forEach(field => {
+      if (!seen.has(field)) {
+        seen.add(field)
+        fields.push(field)
+      }
+    })
+  })
+
+  return fields
+}
+
+export function _createTableMap (data: TableRow[]): ITableMap {
   return data.map(getEntries).reduce(
     (tMap, rowKVs, rowIndex) =>
       rowKVs.reduce(
         (map, [key, value]) => {
           const columnValues = map[key] || Array.from({ length: data.length }).map(() => '')
-          columnValues[rowIndex] =
-            (typeof value !== 'string' ? JSON.stringify(value) : value) || ''
+          columnValues[rowIndex] = serializeTableValue(value)
           map[key] = columnValues
 
           return map
@@ -92,16 +104,38 @@ export function _createTableMap (data: any[]): ITableMap {
   ) as ITableMap
 }
 
-export interface ITableEntries extends Array<{ fieldName: string, fieldValues: string[] }> {}
+export type ITableEntries = TableEntries
 
 export function _createTableEntries (
   tableMap: ITableMap,
   beforeTableEncode: (entries: ITableEntries) => ITableEntries = i => i,
 ): ITableEntries {
-  return beforeTableEncode(getEntries(tableMap).map(([fieldName, fieldValues]) => ({
+  const sourceEntries = getEntries(tableMap).map(([fieldName, fieldValues]) => ({
     fieldName,
     fieldValues,
-  })))
+  }))
+  const entries = beforeTableEncode(sourceEntries)
+
+  assert(isArray(entries), 'beforeTableEncode must return an array of table entries')
+
+  const rowCount = sourceEntries.length ? sourceEntries[0].fieldValues.length : 0
+  const fieldNames = new Set<string>()
+
+  entries.forEach(entry => {
+    assert(
+      entry !== null
+      && typeof entry === 'object'
+      && typeof entry.fieldName === 'string'
+      && isArray(entry.fieldValues)
+      && entry.fieldValues.every(value => typeof value === 'string'),
+      'Each table entry must have a string fieldName and an array of string fieldValues',
+    )
+    assert(entry.fieldValues.length === rowCount, `Each table column must contain ${rowCount} values`)
+    assert(!fieldNames.has(entry.fieldName), 'Table field names must be unique')
+    fieldNames.add(entry.fieldName)
+  })
+
+  return entries
 }
 
 // Rule: Fields that contain commas must begin and end with double quotes.
@@ -129,20 +163,37 @@ interface CreateCSVDataOptions {
   escapeFormulae?: boolean,
 }
 
-const defaultCreateCSVDataOption: Required<CreateCSVDataOptions> = {
-  beforeTableEncode: i => i,
+const defaultCreateCSVDataOption: Required<Omit<CreateCSVDataOptions, 'beforeTableEncode'>> = {
   delimiter: ',',
   escapeFormulae: false,
 }
 
 // Reference: https://techterms.com/definition/csv
 export function createCSVData (
-  data: any[],
+  data: TableRow[],
   options: CreateCSVDataOptions = {},
 ) {
-  const { beforeTableEncode, delimiter, escapeFormulae } = { ...defaultCreateCSVDataOption, ...options }
+  const { beforeTableEncode } = options
+  const { delimiter, escapeFormulae } = { ...defaultCreateCSVDataOption, ...options }
 
   if (!data.length) return ''
+
+  if (!beforeTableEncode) {
+    const fields = getTableFields(data)
+
+    if (!fields.length) return ''
+
+    const head = fields.map(field => encloser(field, delimiter)).join(delimiter) + '\r\n'
+    const rows = data.map(row => fields.map(field => encloser(
+      Object.prototype.hasOwnProperty.call(row, field)
+        ? serializeTableValue(row[field])
+        : '',
+      delimiter,
+      escapeFormulae,
+    )).join(delimiter))
+
+    return head + rows.join('\r\n')
+  }
 
   const tableMap = _createTableMap(data)
   const tableEntries = _createTableEntries(tableMap, beforeTableEncode)
@@ -162,7 +213,7 @@ export function createCSVData (
 }
 
 export function _renderTableHTMLText (
-  data: any[],
+  data: TableRow[],
   beforeTableEncode: (entries: ITableEntries) => ITableEntries,
 ) {
   assert(data.length > 0)
@@ -200,8 +251,8 @@ interface CreateXLSDataOptions {
 
 const defaultCreateXLSDataOptions: Required<CreateXLSDataOptions> = { beforeTableEncode: i => i }
 
-export function createXLSData (data: any[], options?: CreateXLSDataOptions) {
-  const { beforeTableEncode } = { ...defaultCreateXLSDataOptions, ...options }
+export function createXLSData (data: TableRow[], options?: CreateXLSDataOptions) {
+  const beforeTableEncode = options?.beforeTableEncode ?? defaultCreateXLSDataOptions.beforeTableEncode
 
   if (!data.length) return ''
 
@@ -223,34 +274,65 @@ export function createXLSData (data: any[], options?: CreateXLSDataOptions) {
   return content
 }
 
-export function createXMLData (data: object) {
+export function createXMLData (data: unknown) {
   const content =
 
-`<?xml version="1.0" encoding="utf-8"?><!DOCTYPE base>
+`<?xml version="1.0" encoding="utf-8"?>
 ${_renderXML(data, 'base')}
 `
 
   return content
 }
 
-function _renderXML (data: any, tagName: string, arrayElementTag = 'element', spaces = 0): string {
-  const tag = normalizeXMLName(tagName) || normalizeXMLName(arrayElementTag) || 'element'
+function _renderXML (
+  data: unknown,
+  tagName: string,
+  arrayElementTag = 'element',
+  spaces = 0,
+  path = '$',
+  ancestors: WeakSet<object> = new WeakSet<object>(),
+): string {
+  const normalizedTag = normalizeXMLName(tagName)
+  const tag = normalizedTag || normalizeXMLName(arrayElementTag) || 'element'
+  const sourceNameAttribute = tag === tagName ? '' : ` name="${escapeHTML(tagName)}"`
   const indentSpaces = indent(spaces)
 
   if (data === null || data === undefined) {
-    return `${indentSpaces}<${tag} />`
+    return `${indentSpaces}<${tag}${sourceNameAttribute} />`
   }
 
-  const content = isArray(data)
-    ? data.map(item => _renderXML(item, arrayElementTag, arrayElementTag, spaces + 2)).join('\n')
-    : typeof data === 'object'
-      ? getEntries(data as Record<string, unknown>)
-        .map(([key, value]) => _renderXML(value, key, arrayElementTag, spaces + 2)).join('\n')
-      : indentSpaces + '  ' + stripHTML(String(data))
+  if (typeof data === 'object') {
+    if (ancestors.has(data)) throw new Error(`Invalid export data. Circular reference found at ${path}`)
+    ancestors.add(data)
+  }
+
+  let content: string
+
+  try {
+    content = isArray(data)
+      ? data.map((item, index) => _renderXML(
+          item,
+          arrayElementTag,
+          arrayElementTag,
+          spaces + 2,
+          `${path}[${index}]`,
+          ancestors,
+        )).join('\n')
+      : typeof data === 'object'
+        ? getEntries(data as Record<string, unknown>)
+          .map(([key, value]) => {
+            const childPath = /^[A-Za-z_$][\w$]*$/.test(key) ? `${path}.${key}` : `${path}[${JSON.stringify(key)}]`
+
+            return _renderXML(value, key, arrayElementTag, spaces + 2, childPath, ancestors)
+          }).join('\n')
+        : indentSpaces + '  ' + stripHTML(String(data))
+  } finally {
+    if (typeof data === 'object') ancestors.delete(data)
+  }
 
   const contentWithWrapper =
 
-`${indentSpaces}<${tag}>
+`${indentSpaces}<${tag}${sourceNameAttribute}>
 ${content}
 ${indentSpaces}</${tag}>`
 

@@ -29,4 +29,9 @@ describe('_createJSONData', () => {
 
     expect(JSON.parse(_createJSONData(toJSON2, null, 0))).toEqual(parsedAs2)
   })
+
+  it('rejects values that JSON.stringify cannot serialize at the root', () => {
+    expect(() => _createJSONData(() => undefined, null, 0))
+      .toThrow('Invalid export data. Please provide valid JSON data')
+  })
 })

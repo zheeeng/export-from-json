@@ -107,19 +107,27 @@ export const fieldsMapperObj1 = { greeting: 'greet' }
 
 export const testTableItemsWithFields1 = [
   { greeting: 'hello' },
+  { greeting: undefined },
+  { greeting: undefined },
 ]
 export const testTableItemsWithFieldsMapperObj1 = [
   { greet: 'hello' },
+  { greet: undefined },
+  { greet: undefined },
 ]
 
 export const fields2 = ['greeting', 'bar', 'd']
 export const fieldsMapperObj2 = { greeting: 'greet', 'bar': 'baz', 'd': 'ddd' } 
 
 export const testTableItemsWithFields2 = [
-  { greeting: 'hello' }, { bar: 'bar' }, { 'd': 'D' },
+  { greeting: 'hello', bar: undefined, d: undefined },
+  { greeting: undefined, bar: 'bar', d: undefined },
+  { greeting: undefined, bar: undefined, d: 'D' },
 ]
 export const testTableItemsWithFieldsMapperObj2 = [
-  { greet: 'hello' }, { 'baz': 'bar' }, { 'ddd': 'D' },
+  { greet: 'hello', baz: undefined, ddd: undefined },
+  { greet: undefined, baz: 'bar', ddd: undefined },
+  { greet: undefined, baz: undefined, ddd: 'D' },
 ]
 
 // multiply numeric field values

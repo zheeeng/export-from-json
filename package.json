@@ -1,16 +1,18 @@
 {
   "name": "export-from-json",
   "version": "1.8.1",
-  "description": "Export to txt, json, csv, xls, xml format file from valid JavaScript JSON object.",
+  "description": "Export JavaScript and JSON data to txt, json, csv, tsv, xls, xml, css, and html files.",
   "keywords": [
     "json",
     "csv",
+    "tsv",
     "xls",
     "xml",
     "excel",
     "typescript"
   ],
   "type": "module",
+  "sideEffects": false,
   "main": "dist/umd/index.cjs",
   "module": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -26,13 +28,13 @@
     "build:umd": "rollup -c ./config/rollup.config.js --bundleConfigAsCjs",
     "test": "npm run test:lint && npm run test:spec",
     "test:spec": "jest",
+    "test:package": "node ./scripts/verify-package.mjs",
     "test:update": "jest --updateSnapshot",
     "test:lint": "eslint src __tests__ --max-warnings 0",
     "test:manual": "npm test && npm run build && open example/index.html",
     "precommit": "npm test",
     "prepush": "npm test",
-    "prepublishOnly": "npm run build",
-    "release": "npm version patch && npm publish"
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "src",
@@ -41,8 +43,9 @@
   ],
   "exports": {
     ".": {
-      "require": "./dist/umd/index.cjs",
       "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/umd/index.cjs",
       "default": "./dist/esm/index.js"
     },
     "./package.json": "./package.json"

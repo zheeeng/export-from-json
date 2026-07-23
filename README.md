@@ -131,21 +131,35 @@ TSV exports always use a tab delimiter, the `.tsv` extension, and the `text/tab-
 For compatibility with common spreadsheet tools, fields containing tabs are encoded with the same double-quote
 extension used by the CSV encoder. Strict IANA TSV consumers may reject embedded tabs even when quoted.
 
+The legacy `xls` export contains an HTML table that spreadsheet applications can open; it is not a binary BIFF
+workbook or an XLSX archive. Consumers that require a native workbook format should convert the exported table
+with a dedicated spreadsheet library.
+
+XML exports do not include a `DOCTYPE`. When a source field name must be normalized into a valid XML element
+name, the original key is preserved in an escaped `name` attribute. Circular references are rejected with the
+path at which the cycle was found.
+
 | Option name | Required | Type | Description
 | ----------- | -------- | ---- | ----
-| data        | true     | `Array<JSON>`, `JSON` or `string` | If the exportType is 'json', data can be any parsable JSON. If the exportType is 'csv', 'tsv', or 'xls', data can only be an array of parsable JSON. If the exportType is 'txt', 'css', or 'html', the data must be a string type.
+| data        | true     | `Array<JSON>`, `JSON` or `string` | If the exportType is 'json', data can be any JSON value. If the exportType is 'csv', 'tsv', or 'xls', data can only be an array of parsable JSON. If the exportType is 'txt', 'css', or 'html', the data must be a string type.
 | fileName    | false    | string | filename without extension, default to `'download'`
 | extension    | false    | string | filename extension, by default it takes the exportType
-| fileNameFormatter    | false    | `(name: string) => string` | filename formatter, by default the file name will be formatted to snake case
-| fields      | false    | `string[]` or field name mapper type `Record<string, string>`  | fields filter, also supports mapper field name by passing an name mapper, e.g. { 'bar': 'baz' }, default to `undefined`
+| fileNameFormatter    | false    | `(name: string) => string` | Filename formatter. By default, every run of whitespace is replaced with `_`.
+| fields      | false    | `string[]` or field name mapper type `Record<string, string>` | Select and optionally rename fields. Declaration order determines output column order; every selected column is retained even when all values are missing. Output field names must be unique.
 | exportType  | false    | Enum ExportType | 'txt'(default), 'css', 'html', 'json', 'csv', 'tsv', 'xls', 'xml'
 | processor   | false    | `(content: string, type: ExportType, fileName: string) => any` | default to a front-end downloader
 | withBOM     | false    | boolean | Add BOM(byte order mark) metadata to CSV or TSV files. BOM is expected by `Excel` when reading UTF-8 files. It defaults to `false`.
-| beforeTableEncode     | false    | `(entries: { fieldName: string, fieldValues: string[] }[]) => { fieldName: string, fieldValues: string[] }[]` | Alter table entries before encoding CSV, TSV, or XLS data.
+| beforeTableEncode     | false    | `(entries: TableEntries) => TableEntries` | Alter columns before encoding CSV, TSV, or XLS data. Field names must be unique and every string-value column must retain the original row count.
 | delimiter   | false    | `',' \| ';'` | Specify the CSV delimiter. It defaults to `,` and does not override TSV's fixed tab delimiter.
 | escapeFormulae   | false    | boolean | Prefix formula-like CSV or TSV cell values with a single quote to reduce spreadsheet formula injection risk. Field names are not modified. It defaults to `false`.
 
 ### Tips
+
+* TypeScript consumers can import `ExportType`, `IOption`, `TableRow`, `TableEntry`, and `TableEntries`
+  directly from the package.
+
+* CSV and TSV exports render rows directly by default to reduce intermediate memory. Supplying
+  `beforeTableEncode` uses the column-oriented transform path because the callback operates on complete columns.
 
 * You can reference these exported types through a mounted static field `types`, e.g.
 
@@ -163,3 +177,7 @@ exportFromJSON({
     beforeTableEncode: rows => rows.sort((p, c) => p.fieldName.localeCompare(c.fieldName)),
 })
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development, verification, and release instructions.

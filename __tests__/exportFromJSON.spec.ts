@@ -29,6 +29,38 @@ describe('exportFromJSON JSON string input', () => {
   })
 })
 
+describe('exportFromJSON JSON primitive input', () => {
+  it.each([42, true, null])('rejects direct primitive value %p', data => {
+    expect(() => exportFromJSON({
+      data: data as unknown as object,
+      exportType: 'json',
+      processor: contentProcessor,
+    })).toThrow('Invalid export data. Please provide a valid JSON')
+  })
+})
+
+describe('exportFromJSON conversion pipeline', () => {
+  it('does not serialize an entire table before CSV encoding', () => {
+    const toJSON = jest.fn(() => 'serialized')
+
+    expect(exportFromJSON({
+      data: [{ value: { toJSON } }],
+      exportType: 'csv',
+      processor: contentProcessor,
+    })).toEqual('value\r\n"""serialized"""')
+    expect(toJSON).toHaveBeenCalledTimes(1)
+  })
+
+  it('normalizes every whitespace run in the default filename', () => {
+    expect(exportFromJSON({
+      data: 'content',
+      fileName: 'quarterly sales report',
+      exportType: 'txt',
+      processor: (_content, _type, fileName) => fileName,
+    })).toEqual('quarterly_sales_report.txt')
+  })
+})
+
 describe('exportFromJSON table validation', () => {
   it('rejects rows that are not objects', () => {
     expect(() => exportFromJSON({
@@ -73,5 +105,16 @@ describe('exportFromJSON CSV formula escaping', () => {
       .toEqual('value\r\n=1+1')
     expect(exportFromJSON({ ...options, escapeFormulae: true }))
       .toEqual("value\r\n'=1+1")
+  })
+})
+
+describe('exportFromJSON field schemas', () => {
+  it('keeps selected columns when all rows are missing the field', () => {
+    expect(exportFromJSON({
+      data: [{ other: 1 }, { other: 2 }],
+      fields: ['selected'],
+      exportType: 'csv',
+      processor: contentProcessor,
+    })).toEqual('selected\r\n\r\n')
   })
 })

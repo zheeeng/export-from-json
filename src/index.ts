@@ -1,5 +1,10 @@
 import exportFromJSON from './exportFromJSON.js'
-import type { ExportType } from './types.js'
 
-export type { ExportType }
+export type { IOption } from './exportFromJSON.js'
+export type {
+  ExportType,
+  TableEntries,
+  TableEntry,
+  TableRow,
+} from './types.js'
 export default exportFromJSON

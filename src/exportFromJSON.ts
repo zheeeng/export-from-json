@@ -1,7 +1,7 @@
 import { assert, isArray, normalizeFileName } from './utils.js'
 import { downloadFile } from './processors.js'
 import { _prepareData, _createJSONData, createCSVData, createXLSData, createXMLData, _createFieldsMapper } from './converters.js'
-import { exportTypes, ExportType } from './types.js'
+import { exportTypes, ExportType, TableEntries, TableRow } from './types.js'
 export interface IOption<R = void> {
   data: object | string
   fileName?: string
@@ -14,13 +14,13 @@ export interface IOption<R = void> {
   processor?: (content: string, type: ExportType, fileName: string) => R
   withBOM?: boolean
   beforeTableEncode?: (
-    tableRow: Array<{ fieldName: string, fieldValues: string[] }>,
-  ) => Array<{ fieldName: string, fieldValues: string[]}>
+    tableRow: TableEntries,
+  ) => TableEntries
   delimiter?: ',' | ';'
   escapeFormulae?: boolean
 }
 
-function isTableData (data: unknown): data is Array<Record<string, unknown>> {
+function isTableData (data: unknown): data is TableRow[] {
   return isArray(data) && data.every(row => {
     if (row === null || typeof row !== 'object' || isArray(row)) return false
     const prototype = Object.getPrototypeOf(row)
@@ -40,14 +40,14 @@ function exportFromJSON<R = void> ({
   data,
   fileName = 'download',
   extension,
-  fileNameFormatter = name => name.replace(/\s+/, '_'),
+  fileNameFormatter = name => name.replace(/\s+/g, '_'),
   fields,
   exportType = 'txt',
   replacer = null,
   space = 4,
   processor = downloadFile as never,
   withBOM = false,
-  beforeTableEncode = (i) => i,
+  beforeTableEncode,
   delimiter = ',',
   escapeFormulae = false,
 }: IOption<R>): R {
@@ -69,14 +69,17 @@ function exportFromJSON<R = void> ({
     ? fieldsMapper(preparedData as Record<string, unknown> | Array<Record<string, unknown>>)
     : preparedData
 
-  const JSONData = _createJSONData(safeData as object, replacer, space)
   switch (exportType) {
     case 'txt':
     case 'css':
     case 'html': {
+      const JSONData = _createJSONData(safeData, replacer, space)
+
       return processor(JSONData, exportType, normalizeFileName(fileName, extension ?? exportType, fileNameFormatter))
     }
     case 'json': {
+      const JSONData = _createJSONData(safeData, replacer, space)
+
       return processor(JSONData, exportType, normalizeFileName(fileName, extension ?? 'json', fileNameFormatter))
     }
     case 'csv':
@@ -100,7 +103,7 @@ function exportFromJSON<R = void> ({
       return processor(content, exportType, normalizeFileName(fileName, extension ?? 'xls', fileNameFormatter))
     }
     case 'xml': {
-      const content = createXMLData(safeData as object)
+      const content = createXMLData(safeData)
 
       return processor(content, exportType, normalizeFileName(fileName, extension ?? 'xml', fileNameFormatter))
     }

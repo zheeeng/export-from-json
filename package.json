@@ -60,7 +60,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "rollup": "^4.0.0",
     "rollup-plugin-typescript2": "^0.37.0",
-    "ts-jest": "^29.1.1",
+    "ts-jest": "^29.4.12",
     "tslib": "^2.6.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.65.0"

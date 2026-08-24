@@ -1,6 +1,6 @@
 {
   "name": "export-from-json",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "Export JavaScript and JSON data to txt, json, csv, tsv, xls, xml, css, and html files.",
   "keywords": [
     "json",

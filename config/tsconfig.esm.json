@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "../dist/esm",
     "rootDir": "../src",
-    "declaration": false
+    "declaration": false,
+    "importHelpers": true
   }
 }

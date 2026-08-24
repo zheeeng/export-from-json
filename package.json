@@ -50,6 +50,9 @@
     },
     "./package.json": "./package.json"
   },
+  "dependencies": {
+    "tslib": "^2.6.1"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
@@ -61,7 +64,6 @@
     "rollup": "^4.62.4",
     "rollup-plugin-typescript2": "^0.37.0",
     "ts-jest": "^29.4.12",
-    "tslib": "^2.6.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.67.0"
   },

@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -16,6 +16,16 @@ const run = (command, args, options = {}) => execFileSync(command, args, {
 })
 
 try {
+  const esmDirectory = join(root, 'dist', 'esm')
+  readdirSync(esmDirectory)
+    .filter(fileName => fileName.endsWith('.js'))
+    .forEach(fileName => {
+      const source = readFileSync(join(esmDirectory, fileName), 'utf8')
+      if (/\bthis && this\.__/.test(source)) {
+        throw new Error(`ESM output contains a top-level TypeScript helper in ${fileName}`)
+      }
+    })
+
   const packOutput = execFileSync('npm', ['pack', '--json', '--ignore-scripts'], {
     cwd: root,
     encoding: 'utf8',
